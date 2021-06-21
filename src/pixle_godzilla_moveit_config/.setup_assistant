@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: pixle_godzilla
+    relative_path: urdf/pixle_godzilla.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/pixle_godzilla.srdf
+  CONFIG:
+    author_name: xinyusun
+    author_email: xinyusun.cs@icloud.com
+    generated_timestamp: 1621481526

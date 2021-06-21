@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/src/arm_moveit_kinematics/include",
+                "/opt/ros/melodic/include",
+                "/usr/include/eigen3",
+                "/usr/local/include",
+                "${workspaceFolder}/devel/include",
+                "${workspaceFolder}/src/mineral_detect/OpenYolo/detect/include",
+                "${workspaceFolder}/src/mineral_detect/PlaneExtract/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64"
+        }
+    ],
+    "version": 4
+}

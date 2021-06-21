@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot name="Tiger_arm">
+    <link name="base">
+        
+<inertial>
+            <origin xyz="2.54629609151788E-07 0.0662380069317921 -0.00124612656496132" rpy="0 0 0" />
+            <mass value="47.6005101726764" />
+            <inertia ixx="1.47320470339389" ixy="4.60333655660155E-09" ixz="5.94449931020951E-09" iyy="2.81285745050572" iyz="-4.79908141039344E-07" izz="1.47153611098612" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/base.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="1 1 1 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/base.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <link name="shoulder_yaw">
+        
+<inertial>
+            <origin xyz="-0.0053121072866571 -0.00128217968756816 0.110119141133242" rpy="0 0 0" />
+            <mass value="1.45038674924772" />
+            <inertia ixx="0.00422089433097854" ixy="-9.00654543341045E-07" ixz="-4.19750918096705E-05" iyy="0.00552395581650551" iyz="-8.28258512827932E-08" izz="0.00183113993385906" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/shoulder_yaw.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="1 1 1 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/shoulder_yaw.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="shoulder_yaw" type="revolute">
+        <origin xyz="0 0.14927 0.149" rpy="0 0 -1.8753" />
+        <parent link="base" />
+        <child link="shoulder_yaw" />
+        <axis xyz="0 0 -1" />
+        <limit lower="-3.0543261" upper="3.0543261" effort="100.0" velocity="40.0" />
+        <safety_controller soft_upper_limit="3.0543261" soft_lower_limit="-3.0543261" k_position="100.0" k_velocity="40.0" />
+    </joint>
+    <link name="shoulder_pitch">
+        
+<inertial>
+            <origin xyz="1.09616016263914E-09 0.131773540140463 0.00038377150693758" rpy="0 0 0" />
+            <mass value="0.238295313985988" />
+            <inertia ixx="0.0002148562191833" ixy="-9.6311987941255E-08" ixz="-1.17224790665464E-12" iyy="9.99752120065712E-05" iyz="8.02183120886886E-12" izz="0.000223267073431432" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/shoulder_pitch.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="1 1 1 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/shoulder_pitch.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="shoulder_pitch" type="revolute">
+        <origin xyz="0 0 0.2125" rpy="1.5708 0.34795 0" />
+        <parent link="shoulder_yaw" />
+        <child link="shoulder_pitch" />
+        <axis xyz="0 0 -1" />
+        <limit lower="-3.0543261" upper="3.0543261" effort="100.0" velocity="40.0" />
+        <safety_controller soft_upper_limit="3.0543261" soft_lower_limit="-3.0543261" k_position="100.0" k_velocity="40.0" />
+    </joint>
+    <link name="Elbow">
+        
+<inertial>
+            <origin xyz="-0.00262385307086366 0.0255044939613573 0.00298409658847223" rpy="0 0 0" />
+            <mass value="0.650445956289885" />
+            <inertia ixx="0.000395910111607093" ixy="4.81279358695777E-07" ixz="-5.53957348724011E-09" iyy="0.000806135658770104" iyz="1.37411049030121E-07" izz="0.000909170727184665" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/Elbow.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="1 1 1 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/Elbow.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="Elbow" type="revolute">
+        <origin xyz="0 0.28 0" rpy="0 0 0.26363" />
+        <parent link="shoulder_pitch" />
+        <child link="Elbow" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.0543261" upper="3.0543261" effort="100.0" velocity="40.0" />
+        <safety_controller soft_upper_limit="3.0543261" soft_lower_limit="-3.0543261" k_position="100.0" k_velocity="40.0" />
+    </joint>
+    <link name="Wrist_roll">
+        
+<inertial>
+            <origin xyz="4.17416057274522E-09 -0.00693348920369073 0.116850681679422" rpy="0 0 0" />
+            <mass value="0.251980443777845" />
+            <inertia ixx="0.000148656005221232" ixy="-1.00551199323999E-12" ixz="7.59661194094204E-09" iyy="0.00012343379259067" iyz="-3.57029809037319E-07" izz="0.000138610543332276" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/Wrist_roll.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="1 1 1 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/Wrist_roll.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="Wrist_roll" type="revolute">
+        <origin xyz="0.08 0 0" rpy="1.5708 -0.045373 1.5708" />
+        <parent link="Elbow" />
+        <child link="Wrist_roll" />
+        <axis xyz="0 0 1" />
+        <limit lower="-3.0543261" upper="3.0543261" effort="100.0" velocity="40.0" />
+        <safety_controller soft_upper_limit="3.0543261" soft_lower_limit="-3.0543261" k_position="100.0" k_velocity="40.0" />
+    </joint>
+    <link name="Wrist_pitch">
+        
+<inertial>
+            <origin xyz="0.00570853997150164 0.0133593077339031 6.93889390390723E-17" rpy="0 0 0" />
+            <mass value="0.108713030832722" />
+            <inertia ixx="4.29073724278947E-05" ixy="3.33970481676602E-07" ixz="6.7762635780344E-21" iyy="3.24960719415075E-05" iyz="-1.84759061619844E-20" izz="5.16194511029778E-05" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/Wrist_pitch.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="1 1 1 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/Wrist_pitch.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="Wrist_pitch" type="revolute">
+        <origin xyz="0 0 0.206" rpy="-1.5708 1.4864 3.1416" />
+        <parent link="Wrist_roll" />
+        <child link="Wrist_pitch" />
+        <axis xyz="0 0 -1" />
+        <limit lower="-3.0543261" upper="3.0543261" effort="100.0" velocity="40.0" />
+        <safety_controller soft_upper_limit="3.0543261" soft_lower_limit="-3.0543261" k_position="100.0" k_velocity="40.0" />
+    </joint>
+    <link name="Wrist_yaw">
+        
+<inertial>
+            <origin xyz="-2.51872257078789E-09 -0.00189759352082686 0.0292537071165866" rpy="0 0 0" />
+            <mass value="0.0315216051343888" />
+            <inertia ixx="1.53760460299136E-05" ixy="2.61970625254985E-11" ixz="2.54168599653161E-13" iyy="1.32298811803762E-05" iyz="2.07233484449597E-07" izz="1.00485757557239E-05" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/Wrist_yaw.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.866666666666667 0.866666666666667 0.890196078431372 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://Tiger_arm/meshes/Wrist_yaw.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="Wrist_yaw" type="revolute">
+        <origin xyz="0 0 0" rpy="-0.064776 -1.5382 0.066283" />
+        <parent link="Wrist_pitch" />
+        <child link="Wrist_yaw" />
+        <axis xyz="0 -0.9979 -0.064731" />
+        <limit lower="-3.0543261" upper="3.0543261" effort="100.0" velocity="40.0" />
+        <safety_controller soft_upper_limit="3.0543261" soft_lower_limit="-3.0543261" k_position="100.0" k_velocity="40.0" />
+    </joint>
+    
+<transmission name="trans_shoulder_yaw">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="shoulder_yaw">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="shoulder_yaw_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_shoulder_pitch">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="shoulder_pitch">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="shoulder_pitch_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_Elbow">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="Elbow">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Elbow_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_Wrist_roll">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="Wrist_roll">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Wrist_roll_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_Wrist_pitch">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="Wrist_pitch">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Wrist_pitch_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_Wrist_yaw">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="Wrist_yaw">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="Wrist_yaw_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/</robotNamespace>
+        </plugin>
+    </gazebo>
+</robot>

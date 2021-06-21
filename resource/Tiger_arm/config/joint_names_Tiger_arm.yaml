@@ -1,0 +1,1 @@
+controller_joint_names: ['', 'shoulder_yaw', 'shoulder_pitch', 'Elbow', 'Wrist_roll', 'Wrist_pitch', 'Wrist_yaw', ]
