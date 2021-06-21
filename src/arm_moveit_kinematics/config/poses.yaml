@@ -1,4 +1,4 @@
-Total: 19
+Total: 20
 EffectorLength: 0.05
 Points:
   -
@@ -228,4 +228,16 @@ Points:
       - 3.12
       - 0.0000
       - -1.57
+    action: 1
+  -
+    tag: zero_point #零点
+    id: 19
+    xyz:
+      - 0.38
+      - 0.00
+      - 0.62
+    rpy:
+      - 3.1416
+      - 0.0000
+      - -1.5708
     action: 1

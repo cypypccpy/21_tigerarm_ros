@@ -7,7 +7,7 @@ void ArmJointsControllerNode::set_offline_pose() {
 
     //抢矿
     pose_name = {"pick_island"};
-    speed_scale = 0.5;
+    speed_scale = 0.3;
     set_target_pose(pose_name);
     g_pose_offline_pose.push_back(g_pose_muilt_target);
 
@@ -21,8 +21,8 @@ void ArmJointsControllerNode::compute_offline_trajectory() {
     /* Update target position */
     for (int i = 0; i < g_pose_offline_pose.size(); i++) {
         
-        std::vector<double> joint_group_position = {0, -0.253489, 0.0112742, 0, -0.150401, -0.001};
-        
+        std::vector<double> joint_group_position = {0, -0.254034, 0.0116232, 0, -0.151452, -0.001};
+
         moveit::core::RobotStatePtr offline_start_state(move_group_interface.getCurrentState());
         offline_start_state->setJointGroupPositions("arm", joint_group_position);
         move_group_interface.setStartState(*offline_start_state);

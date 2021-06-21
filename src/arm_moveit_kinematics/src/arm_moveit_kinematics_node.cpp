@@ -55,6 +55,10 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
     geometry_msgs::PoseStamped g_pose_target_stamp;
     std::vector<std::string> target_pose_name;
 
+    moveit::core::RobotStatePtr R_start_state(move_group_interface.getCurrentState());
+    std::vector<double> joint_group_position = {0.0001, -0.253558, 0.0111645, 0.0003, -0.151763, -0.001};
+    R_start_state->setJointGroupPositions("arm", joint_group_position);
+
     /* clear last */
     g_pose_delta.clear();
 
@@ -153,9 +157,13 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             ROS_INFO_NAMED("arm_log", "Select place poisition");
             break;
         case kv::_R: //手动抓取矿石
+            
             target_pose_name = {"pick_island"};
             offline_move_task(0);
+            
             //set_target_pose(target_pose_name);
+            //----------------------准备修复上抬-------------------------
+            
             break;
         case kv::_f: //准备抓取矿石(原姿态，较后，现已废弃)
             target_pose_name = {"pre_pick_island"};
@@ -169,8 +177,8 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             target_pose_name = {"boxing_right"};
             set_target_pose(target_pose_name);
             break;
-        case kv::_l: //待定
-            target_pose_name = {"pre_pick_island"};
+        case kv::_l: //放矿回矿仓后再次进入准备夹矿模式(防止碰到资源岛)
+            target_pose_name = {"zero_point", "pre_pick_island2"};
             set_target_pose(target_pose_name);
             break;
         default:
@@ -203,6 +211,7 @@ moveit_msgs::RobotTrajectory ArmJointsControllerNode::compute_trajectory(const s
         move_group_interface->setStartState(my_plan.start_state_);
 
     }
+    
     //连接轨迹
     trajectory.joint_trajectory.joint_names = my_muilt_plan[0].trajectory_.joint_trajectory.joint_names;
     trajectory.joint_trajectory.points = my_muilt_plan[0].trajectory_.joint_trajectory.points;
@@ -229,7 +238,7 @@ moveit_msgs::RobotTrajectory ArmJointsControllerNode::compute_trajectory(const s
     auto toc = ros::Time::now() - tic;
     ROS_INFO_NAMED("arm_log", "Plan %s in time %.2fms", success ? "SUCCEED" : "FAILED", toc.toSec() * 1000);
 
-    return trajectory_actul;
+    return my_plan.trajectory_;
 }
 
 void ArmJointsControllerNode::move_task() {
@@ -266,6 +275,7 @@ void ArmJointsControllerNode::move_task() {
                     arm_states_.execute_finished = true;
 
                     arm_puber_.publish(arm_states_);
+                    arm_states_.air_pump_close = false;
                 }
                 else {
                     arm_states_.execute_finished = true;

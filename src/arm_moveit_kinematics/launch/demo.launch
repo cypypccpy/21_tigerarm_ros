@@ -6,15 +6,15 @@
   </node>
   <node name="arm_keyboard_node" pkg="arm_moveit_kinematics" type="arm_keyboard_node" respawn="false" output="screen" launch-prefix="gnome-terminal -x">
   </node>
-  <node name="arm_joints_controller_node" pkg="arm_moveit_kinematics" type="arm_joints_controller_node" respawn="false" output="screen">
-  </node>
+  <!--node name="arm_joints_controller_node" pkg="arm_moveit_kinematics" type="arm_joints_controller_node" respawn="false" output="screen">
+  </node-->
   <!--
   <node name="mineral_detect_node" pkg="mineral_detect" type="mineral_detect_node" respawn="false" output="screen">
   </node>
   -->
   <node pkg="tf" type="static_transform_publisher" name="base_link_realsense_broadcaster" args="0.06 0.01 -0.06 0 0 3.141592 forearm camera_link 100" />
 
-  <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
-  </include>
+  <!--include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
+  </include-->
   
 </launch>
