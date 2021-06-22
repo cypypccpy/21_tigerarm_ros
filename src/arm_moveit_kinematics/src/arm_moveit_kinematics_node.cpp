@@ -238,7 +238,7 @@ moveit_msgs::RobotTrajectory ArmJointsControllerNode::compute_trajectory(const s
     auto toc = ros::Time::now() - tic;
     ROS_INFO_NAMED("arm_log", "Plan %s in time %.2fms", success ? "SUCCEED" : "FAILED", toc.toSec() * 1000);
 
-    return my_plan.trajectory_;
+    return trajectory_actul;
 }
 
 void ArmJointsControllerNode::move_task() {

@@ -65,7 +65,6 @@ void joint_states_recv_callback(const sensor_msgs::JointStateConstPtr& msg)
 
     /* 准备替换成ros::serialization */
     //ros::serialization::serialize()
-
     if (arm_states_recv) {
         for(size_t i = 0; i < 6; i++){
             joint_position_buffer[i] = msg->position[i] * joint_direction[i];

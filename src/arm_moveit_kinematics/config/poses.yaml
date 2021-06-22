@@ -1,4 +1,4 @@
-Total: 20
+Total: 21
 EffectorLength: 0.05
 Points:
   -
@@ -41,7 +41,7 @@ Points:
     tag: pick_island #手动抓取矿石
     id: 3
     xyz:
-      - 0.52
+      - 0.515
       - 0.00
       - 0.54
     rpy:
@@ -197,13 +197,13 @@ Points:
     tag: boxing_right  #拳击姿态右
     id: 16
     xyz:
-      - 0.48
+      - 0.49
       - -0.15
       - 0.55
     rpy:
-      - 3.12
+      - 3.1212
       - 0.0000
-      - -1.57
+      - -1.9443
     action: 1
   -
     tag: boxing_middle #拳击姿态中
@@ -240,4 +240,16 @@ Points:
       - 3.1416
       - 0.0000
       - -1.5708
+    action: 1
+  -
+    tag: temp_point #抓取中间点
+    id: 20
+    xyz:
+      - 0.49
+      - 0.00
+      - 0.54
+    rpy:
+      - 3.05
+      - 0.0000
+      - -1.57
     action: 1
