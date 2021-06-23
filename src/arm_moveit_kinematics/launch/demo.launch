@@ -17,4 +17,6 @@
   <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
   </include>
   
+  <!--node pkg="rosbag" type="record" name="bag_record" args="-O godzilla.bag -a" /-->
+
 </launch>
