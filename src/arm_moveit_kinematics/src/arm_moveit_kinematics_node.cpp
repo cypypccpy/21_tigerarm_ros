@@ -272,6 +272,7 @@ void ArmJointsControllerNode::move_task() {
 
                     arm_puber_.publish(arm_states_);
                     arm_states_.air_pump_close = false;
+                    air_pump_mode_change = false;
                 }
                 else {
                     arm_states_.execute_finished = true;

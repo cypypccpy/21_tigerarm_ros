@@ -72,7 +72,9 @@ void ArmJointsControllerNode::offline_move_task(const int& index) {
         arm_states_.execute_finished = true;
 
         arm_puber_.publish(arm_states_);
+
         arm_states_.air_pump_close = false;
+        air_pump_mode_change = false;
     }
     else {
         arm_states_.execute_finished = true;
