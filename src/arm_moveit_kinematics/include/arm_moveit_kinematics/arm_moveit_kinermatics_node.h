@@ -22,6 +22,13 @@
 
 using namespace arm_keys;
 
+struct offline_planning
+{
+    double speed_scale_;
+    std::vector<double> joint_begin_position_;
+    std::vector<geometry_msgs::Pose> g_pose_offline_target_;
+};
+
 class ArmJointsControllerNode {
     public:
         explicit ArmJointsControllerNode();
@@ -89,7 +96,8 @@ class ArmJointsControllerNode {
 
         //offline_muilt_task
         std::vector<moveit_msgs::RobotTrajectory> offline_trajectory;
-        std::vector<std::vector<geometry_msgs::Pose>> g_pose_offline_pose;
+        offline_planning offline_planning_;
+        std::vector<offline_planning> offline_planning_queue;
         std::vector<moveit::planning_interface::MoveGroupInterface::Plan> my_offline_plan;
 
         moveit_msgs::RobotTrajectory trajectory;

@@ -7,34 +7,46 @@ void ArmJointsControllerNode::set_offline_pose() {
 
     //抢矿
     pose_name = {"temp_point", "pick_island"};
-    speed_scale = 0.71;
     set_target_pose(pose_name);
-    g_pose_offline_pose.push_back(g_pose_muilt_target);
-
-    arm_pose_updated = false;
+    offline_planning_.g_pose_offline_target_ = g_pose_muilt_target;
+    offline_planning_.speed_scale_ = 0.71;
+    offline_planning_.joint_begin_position_ = {0, -0.254034, 0.0116232, 0, -0.151452, -0.001};
+    offline_planning_queue.push_back(offline_planning_);
     std::vector<geometry_msgs::Pose>().swap(g_pose_muilt_target); 
 
+    
+    pose_name = {"pick_up", "pre_place", "place"};
+    set_target_pose(pose_name);
+    offline_planning_.g_pose_offline_target_ = g_pose_muilt_target;
+    offline_planning_.speed_scale_ = 0.85;
+    offline_planning_.joint_begin_position_ = {0, -0.6686, 0.562822, 0, -0.0139922, -0.001};
+    offline_planning_queue.push_back(offline_planning_);
+
+    std::vector<geometry_msgs::Pose>().swap(g_pose_muilt_target); 
+    
+    arm_pose_updated = false;
 }
 
 void ArmJointsControllerNode::compute_offline_trajectory() {
 
     /* Update target position */
-    for (int i = 0; i < g_pose_offline_pose.size(); i++) {
+    for (int i = 0; i < offline_planning_queue.size(); i++) {
         
-        std::vector<double> joint_group_position = {0, -0.254034, 0.0116232, 0, -0.151452, -0.001};
-        std::vector<double> joint_target_position = {0, -0.375363, 0.167894, 0, -0.11588, -0.001};
-
         moveit::core::RobotStatePtr offline_start_state(move_group_interface.getCurrentState());
-        offline_start_state->setJointGroupPositions("arm", joint_group_position);
+        offline_start_state->setJointGroupPositions("arm", offline_planning_queue[i].joint_begin_position_);
         move_group_interface.setStartState(*offline_start_state);
 
         moveit::planning_interface::MoveGroupInterface::Plan MuiltPlan;
 
-        MuiltPlan.trajectory_ = compute_trajectory(g_pose_offline_pose[i], &move_group_interface);
+        speed_scale = offline_planning_queue[i].speed_scale_;
+        MuiltPlan.trajectory_ = compute_trajectory(offline_planning_queue[i].g_pose_offline_target_, &move_group_interface);
 
         /* 人工赋予轨迹点 */
-        for (int j=1;j<MuiltPlan.trajectory_.joint_trajectory.points.size() - 1;j++) {
-            MuiltPlan.trajectory_.joint_trajectory.points[j].positions = joint_target_position;
+        if (i == 0) {
+            std::vector<double> joint_target_position = {0, -0.375363, 0.167894, 0, -0.11588, -0.001};
+            for (int j=1;j<MuiltPlan.trajectory_.joint_trajectory.points.size() - 1;j++) {
+                MuiltPlan.trajectory_.joint_trajectory.points[j].positions = joint_target_position;
+            }
         }
 
         /* Save trajectory */
@@ -55,9 +67,17 @@ void ArmJointsControllerNode::offline_move_task(const int& index) {
     auto toc = ros::Time::now() - tic;
     ROS_INFO("Execute time %.2fms", toc.toSec() * 1000);
 
-    arm_states_.execute_finished = true;
-    arm_puber_.publish(arm_states_);
-    arm_states_.execute_finished = false;
+    if (air_pump_mode_change) {
+        arm_states_.air_pump_close = true;
+        arm_states_.execute_finished = true;
+
+        arm_puber_.publish(arm_states_);
+        arm_states_.air_pump_close = false;
+    }
+    else {
+        arm_states_.execute_finished = true;
+        arm_puber_.publish(arm_states_);
+    }
 }
 
 /*
