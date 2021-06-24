@@ -14,11 +14,8 @@
 #include "ros/ros.h"
 #include "mineral_detect/Mineral.h"
 #include <geometry_msgs/PoseStamped.h>
-
-#include "CmdlineParser.h"
-#include "Parameter.h"
-#include "SerialPort.h"
-#include "Engineer_Locator.h"
+#include <image_transport/image_transport.h>
+#include <cv_bridge/cv_bridge.h>
 
 using namespace cv;
 using namespace rs2;
@@ -31,16 +28,17 @@ int main(int argc, char *argv[])
   mineral_detect::Mineral mineral_msg;
   ros::NodeHandle n;
   ros::Publisher chatter_pub = n.advertise<geometry_msgs::PoseStamped>("mineral_detect", 1000);
+  
+  image_transport::ImageTransport it(n);
+  image_transport::Publisher pub = it.advertise("camera/image", 100);
+  
   ros::Rate loop_rate(10);
-  PlaneExtract plane;
+  //PlaneExtract plane;
   rs2::align align_to(RS2_STREAM_COLOR);
-  Object yolo_out;
-  detect yolo("/home/robotlab/Desktop/MineralDetection/yolov3-tiny.cfg", "/home/robotlab/Desktop/MineralDetection/yolov3-tiny_final.weights", "/home/robotlab/Desktop/MineralDetection/OpenYolo/config/camPara.yml");
+  //Object yolo_out;
+  //detect yolo("/home/robotlab/Desktop/MineralDetection/yolov3-tiny.cfg", "/home/robotlab/Desktop/MineralDetection/yolov3-tiny_final.weights", "/home/robotlab/Desktop/MineralDetection/OpenYolo/config/camPara.yml");
 
   //---------------------------------崔桐欣代码test------------------------------------
-  Ptr<CmdlineParser> cmdline_parser(new CmdlineParser(argc, argv));
-  Ptr<Engineer_Locator> Engineer_locator(new Engineer_Locator(cmdline_parser, 640, 480));
-
   //cv::VideoWriter writer;
   //writer.open("/home/robotlab/Desktop/video.mp4", cv::VideoWriter::fourcc('M', 'P', '4', '2'), 5, cv::Size(640, 480));
 
@@ -73,10 +71,6 @@ int main(int argc, char *argv[])
     // {
     //   imwrite("1" + time_stamp + ".png", src_img);
     // }
-    
-  //---------------------------------崔桐欣代码test------------------------------------
-  
-    Engineer_locator->blockLocator(src_img, 2);
 
 /*    
     yolo_out = yolo.inference(src_img); //推理模型得到结果
@@ -131,12 +125,15 @@ int main(int argc, char *argv[])
     imshow("mask", color_mask);
 */
 
-    imshow("edge", Engineer_locator->Edge_img);
+    //发布图片消息
+    sensor_msgs::ImagePtr msg1 = cv_bridge::CvImage(std_msgs::Header(), "bgr8", src_img).toImageMsg();
+    pub.publish(msg1);
 
-    imshow("src", src_img);
     waitKey(1);
     FPS = getTickFrequency() / (getTickCount() - FPS);
     cout << "FPS: " << FPS << endl;
+
+
 /*
     if(center_p.x < 0 || center_p.y < 0 || center_p.x > mask.cols || center_p.y > mask.rows)
     {

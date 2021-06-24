@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
+set(OpenCV_DIR "/home/lohse/下载/opencv-4.5.1/build")
 project(mineral_detect)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
@@ -14,14 +15,12 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   message_generation
   tf
+  cv_bridge
+  image_transport
+  sensor_msgs
 )
 add_subdirectory(OpenYolo/detect)
 add_subdirectory(PlaneExtract)
-
-add_subdirectory(CmdlineParser)
-add_subdirectory(MineralBlock)
-add_subdirectory(Parameter)
-add_subdirectory(SerialPort)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -114,7 +113,7 @@ generate_messages(
 catkin_package(
  INCLUDE_DIRS include
  LIBRARIES mineral_detect
- CATKIN_DEPENDS roscpp rospy std_msgs message_runtime
+ CATKIN_DEPENDS roscpp rospy std_msgs message_runtime cv_bridge image_transport sensor_msgs
  DEPENDS system_lib
 )
 
@@ -157,7 +156,7 @@ add_executable(${PROJECT_NAME}_node src/main.cpp)
 ## Specify libraries to link a library or executable target against
  target_link_libraries(${PROJECT_NAME}_node
 
-  ${catkin_LIBRARIES} realsense2 ${OpenCV_LIBS}  detect PlaneExtract MineralBlock CmdlineParser
+  ${catkin_LIBRARIES} realsense2 ${OpenCV_LIBS}  detect PlaneExtract
 
   ${catkin_LIBRARIES} realsense2 ${OpenCV_LIBS}  detect PlaneExtract
 
