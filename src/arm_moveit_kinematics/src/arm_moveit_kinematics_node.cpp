@@ -96,9 +96,15 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             break;
         case kv::_z: //抓到后放入矿仓一条龙
             target_pose_name = {"pick_up", "pre_place", "place"};
+
             air_pump_mode_change = true;
-            offline_move_task(1);
-            //set_target_pose(target_pose_name);
+            if (std::abs(move_group_interface.getCurrentJointValues()[1] - (offline_planning_queue[1].joint_begin_position_[1])) < 0.02) {
+                offline_move_task(1);
+            }
+            else {
+                set_target_pose(target_pose_name);
+            }
+            
             break;
         case kv::_c: //准备抓取障碍块
             target_pose_name = {"pre_pick_block"};

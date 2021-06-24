@@ -14,8 +14,8 @@
   -->
   <node pkg="tf" type="static_transform_publisher" name="base_link_realsense_broadcaster" args="0.06 0.01 -0.06 0 0 3.141592 forearm camera_link 100" />
 
-  <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
-  </include>
+  <!--include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
+  </include-->
   
   <!--node pkg="rosbag" type="record" name="bag_record" args="-O godzilla.bag -a" /-->
 
