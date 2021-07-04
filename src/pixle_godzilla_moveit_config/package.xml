@@ -5,8 +5,8 @@
   <description>
      An automatically generated package with all the configuration and launch files for using the pixle_godzilla with the MoveIt! Motion Planning Framework
   </description>
-  <author email="xinyusun.cs@icloud.com">xinyusun</author>
-  <maintainer email="xinyusun.cs@icloud.com">xinyusun</maintainer>
+  <author email="cyp.cs@icloud.com">cyp</author>
+  <maintainer email="cyp.cs@icloud.com">cyp</maintainer>
 
   <license>BSD</license>
 

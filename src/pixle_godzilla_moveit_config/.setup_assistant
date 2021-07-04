@@ -6,6 +6,6 @@ moveit_setup_assistant_config:
   SRDF:
     relative_path: config/pixle_godzilla.srdf
   CONFIG:
-    author_name: xinyusun
-    author_email: xinyusun.cs@icloud.com
+    author_name: cyp
+    author_email: cyp.cs@icloud.com
     generated_timestamp: 1621481526
