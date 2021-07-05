@@ -5,8 +5,7 @@
 [![Author](https://img.shields.io/badge/Author-cypypccpy-blue.svg "Author")](https://github.com/cypypccpy "Author")
 [![license](https://img.shields.io/github/license/:user/:repo.svg)](LICENSE)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-
-**机械哥斯拉**
+<br></br>
 
 ## 内容列表
 
@@ -16,11 +15,12 @@
 - [TODO](#TODO)
 - [如何贡献](#如何贡献)
 - [使用许可](#使用许可)
-
+<br></br>
 
 ## 背景
 
 基于 `ROS` 和 `Moveit` 实现的机械臂控制系统
+<br></br>
 
 ## 安装
 
@@ -28,6 +28,7 @@
 - `ROS Melodic`
 - `OpenCV 4.5.1`
 - `yaml-cpp`
+<br></br>
 
 ## 用法
 
@@ -106,7 +107,6 @@ rqt_plot
 |shift+w|z轴前进1cm|
 |shift+s|z轴后退1cm|
 
-
 ## TODO
 
 - 如何降低plan的延迟
@@ -134,12 +134,12 @@ rqt_plot
 - 运动稳定性
 
 - [ ] 把一次插值改为多次插值
-
+<br></br>
 
 ## 如何贡献
 
 See [the contributing file](CONTRIBUTING.md)!
-
+<br></br>
 
 ## 使用许可
 
