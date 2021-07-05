@@ -1,15 +1,35 @@
-## 简介
-- 基于 `ROS` 和 `Moveit` 实现的机械臂控制系统
-- __Note__: 每次只取一个，取完不放直接回家；可以往回扔，然后再取下一个
+# Tigerarm_ros
 
-## 环境
+![banner]()
+
+![badge]()
+![badge]()
+[![license](https://img.shields.io/github/license/:user/:repo.svg)](LICENSE)
+[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+
+超级机械哥斯拉
+
+## 内容列表
+
+- [背景](#背景)
+- [安装](#安装)
+- [用法](#用法)
+- [如何贡献](#如何贡献)
+- [使用许可](#使用许可)
+
+## 背景
+
+基于 `ROS` 和 `Moveit` 实现的机械臂控制系统
+
+## 安装
+
 - `Ubuntu 18.04`
 - `ROS Melodic`
 - `OpenCV 4.5.1`
 - `yaml-cpp`
 
-## 配置
-- 编译工作空间
+## 用法
+
 ```bash
 cd ${YOUR_WORK_DIR}/arm_ros
 catkin_make
@@ -20,8 +40,7 @@ source devel/setup.bash
 sudo gpasswd --add ${username} dialout
 ```
 
-## 运行
-- 设置轨迹
+### 设置轨迹
 `src/arm_moveit_kinematics/config/poses.yaml`
 
 ```yaml
@@ -53,7 +72,7 @@ Points: #轨迹点序列
     ...
 ```
 
-- 启动
+### 启动
 ```bash
 roslaunch pixle_godzilla_moveit_config demo.launch
 # 等待直到rviz中画面出现机械臂
@@ -65,7 +84,7 @@ rqt_plot
 # 可以通过rqt查看6个关节的角度变化曲线，跟上位机的曲线对比
 ```
 
-- 控制机械臂
+### 控制机械臂
 
 | 键位 | 功能 |
 |:-:|:-:|
@@ -86,32 +105,11 @@ rqt_plot
 |shift+w|z轴前进1cm|
 |shift+s|z轴后退1cm|
 
+## 如何贡献
 
-## TODO List
+See [the contributing file](CONTRIBUTING.md)!
 
+## 使用许可
 
-- 如何降低plan的延迟
+[MIT © Richard McRichface.](../LICENSE)
 
-- [x] 【重要】模型继续简化
-- [x] 能否离线plan储存为轨迹点
-- [ ] 【重要】使用增量式目标值时不用plan，直接用逆运动学得到joint值并进行连续性检测
-- [ ] 【重要】move是阻塞的，但是运动是连贯的，在自动组操作中可以用pipeline并行降低延迟
-
-
-- 如何提高plan的质量
-
-- [x] 【重要】直接设定轨迹的Cartesian Paths
-- [ ] 直接用request给运动空间设置Constrain，避免大量采样
-- [ ] 设置合理的tolerance
-
-
-- 如何提高运动速度
-
-- [x] 适当调节速度因子
-- [x] urdf中增大关节速度限制
-- [x] 同时记得提高插值速度
-
-
-- 运动稳定性
-
-- [x] 把一次插值改为多次插值
