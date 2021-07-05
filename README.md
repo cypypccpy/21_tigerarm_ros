@@ -1,9 +1,6 @@
 # Tigerarm_ros
 
-![banner]()
-
-![badge]()
-![badge]()
+[![Author](https://img.shields.io/badge/Author-cypypccpy-blue.svg "Author")](https://github.com/cypypccpy "Author")
 [![license](https://img.shields.io/github/license/:user/:repo.svg)](LICENSE)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
@@ -14,8 +11,10 @@
 - [背景](#背景)
 - [安装](#安装)
 - [用法](#用法)
+- [TODO](#TODO)
 - [如何贡献](#如何贡献)
 - [使用许可](#使用许可)
+
 
 ## 背景
 
@@ -105,9 +104,40 @@ rqt_plot
 |shift+w|z轴前进1cm|
 |shift+s|z轴后退1cm|
 
+
+## TODO
+
+- 如何降低plan的延迟
+
+- [x] 【重要】模型继续简化
+- [ ] 能否离线plan储存为轨迹点
+- [ ] 【重要】使用增量式目标值时不用plan，直接用逆运动学得到joint值并进行连续性检测
+- [ ] 【重要】move是阻塞的，但是运动是连贯的，在自动组操作中可以用pipeline并行降低延迟
+
+
+- 如何提高plan的质量
+
+- [x] 【重要】直接设定轨迹的Cartesian Paths
+- [ ] 直接用request给运动空间设置Constrain，避免大量采样
+- [ ] 设置合理的tolerance
+
+
+- 如何提高运动速度
+
+- [x] 适当调节速度因子
+- [x] urdf中增大关节速度限制
+- [x] 同时记得提高插值速度
+
+
+- 运动稳定性
+
+- [ ] 把一次插值改为多次插值
+
+
 ## 如何贡献
 
 See [the contributing file](CONTRIBUTING.md)!
+
 
 ## 使用许可
 
