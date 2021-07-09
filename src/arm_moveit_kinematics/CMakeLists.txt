@@ -24,6 +24,8 @@ find_package(catkin REQUIRED COMPONENTS
   serial
 )
 
+add_subdirectory(OpenYolo/detect)
+add_subdirectory(PlaneExtract)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -154,6 +156,7 @@ link_directories(/home/robotlab/yaml-cpp-0.6.3/build)
 add_executable(${PROJECT_NAME}_node src/arm_moveit_kinematics_node.cpp)
 add_executable(arm_keyboard_node src/arm_keyboard_node.cpp)
 add_executable(arm_joints_controller_node src/arm_joints_controller_node.cpp)
+add_executable(arm_3d_perception src/arm_3d_perception.cpp)
 
 add_library(arm_offline_trajectory_planner src/arm_offline_trajectory_planner.cpp)
 ## Rename C++ executable without prefix
@@ -186,6 +189,11 @@ target_link_libraries(arm_joints_controller_node
   ${catkin_LIBRARIES}
 )
 
+target_link_libraries(
+  ${catkin_LIBRARIES}
+  detect
+  PlaneExtract
+)
 #############
 ## Install ##
 #############
