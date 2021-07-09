@@ -168,8 +168,8 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             //----------------------准备修复上抬-------------------------
             
             break;
-        case kv::_f: //准备抓取矿石(原姿态，较后，现已废弃)
-            target_pose_name = {"pre_pick_island"};
+        case kv::_f: //准备抓取银矿石
+            target_pose_name = {"silver"};
             set_target_pose(target_pose_name);
             break;
         case kv::_j: //矿石位姿不对转一转后兑换
@@ -183,6 +183,15 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             break;
         case kv::_l: //放矿回矿仓后再次进入准备夹矿模式(防止碰到资源岛)
             target_pose_name = {"zero_point", "pre_pick_island2"};
+            set_target_pose(target_pose_name);
+            break;
+        case kv::_e: //抓完银矿后的抬升
+            target_pose_name = {"silver_up"};
+            set_target_pose(target_pose_name);
+            break;
+        case kv::_u: //兑换完矿石后推入矿槽
+            speed_scale = 0.8;
+            target_pose_name = {"push"};
             set_target_pose(target_pose_name);
             break;
         default:
