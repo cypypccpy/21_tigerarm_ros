@@ -6,8 +6,8 @@
   </node>
   <node name="arm_keyboard_node" pkg="arm_moveit_kinematics" type="arm_keyboard_node" respawn="false" output="screen" launch-prefix="gnome-terminal -x">
   </node>
-  <!--node name="arm_joints_controller_node" pkg="arm_moveit_kinematics" type="arm_joints_controller_node" respawn="false" output="screen">
-  </node-->
+  <node name="arm_joints_controller_node" pkg="arm_moveit_kinematics" type="arm_joints_controller_node" respawn="false" output="screen">
+  </node>
   <!--
   <node name="mineral_detect_node" pkg="mineral_detect" type="mineral_detect_node" respawn="false" output="screen">
   </node>

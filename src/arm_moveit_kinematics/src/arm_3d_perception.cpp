@@ -4,7 +4,7 @@ Arm3DPerception::Arm3DPerception():yolo("/home/robotlab/Desktop/MineralDetection
                                   "/home/robotlab/Desktop/MineralDetection/yolov3-tiny_final.weights",
                                   "/home/robotlab/Desktop/MineralDetection/OpenYolo/config/camPara.yml") {
 
-  //point_suber = node_handle_.subscribe("/camera/depth_registered/points", 1, &Arm3DPerception::imageCB, this);
+  point_suber_ = node_handle_.subscribe("/camera/depth_registered/points", 1, &Arm3DPerception::CloudCB, this);
   depth_suber_ = node_handle_.subscribe("/camera/depth_registered/image_raw", 1, &Arm3DPerception::DepthCB, this);
   keyboard_suber_ = node_handle_.subscribe("arm_keys", 100, &Arm3DPerception::key_recv_callback, this);
 
@@ -35,7 +35,7 @@ void Arm3DPerception::DepthCB(const sensor_msgs::ImageConstPtr& image_raw) {
   
 };
 
-void Arm3DPerception::detect_mineral(cv::Mat& src_img) {
+void Arm3DPerception::detect_roi(cv::Mat& src_img) {
   yolo_out = yolo.inference(src_img); //推理模型得到结果
 
   if (yolo_out.boxes.size() <= 0)
@@ -64,6 +64,36 @@ void Arm3DPerception::detect_mineral(cv::Mat& src_img) {
   {
     yolo_out.boxes[0].height = 478 - yolo_out.boxes[0].y;
   }
+}
+
+void Arm3DPerception::CloudCB(const sensor_msgs::PointCloud2ConstPtr& point) {
+  pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
+  pcl::fromROSMsg(*point, *cloud);
+
+  passThroughFilter(cloud);
+  // Declare normals and call function to compute point normals.
+  pcl::PointCloud<pcl::Normal>::Ptr cloud_normals(new pcl::PointCloud<pcl::Normal>);
+  computeNormals(cloud, cloud_normals);
+}
+//--------------------------tool----------------------------------
+
+/** \brief Given a pointcloud extract the ROI defined by the user.
+    @param cloud - Pointcloud whose ROI needs to be extracted. */
+void Arm3DPerception::passThroughFilter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud)
+{
+  pcl::PassThrough<pcl::PointXYZRGB> pass;
+  pass.setInputCloud(cloud);
+  pass.setFilterFieldName("z");
+  // min and max values in z axis to keep
+  pass.setFilterLimits(0.3, 1.1);
+  pass.filter(*cloud);
+}
+
+/** \brief Given the pointcloud and pointer cloud_normals compute the point normals and store in cloud_normals.
+    @param cloud - Pointcloud.
+    @param cloud_normals - The point normals once computer will be stored in this. */
+void Arm3DPerception::computeNormals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, pcl::PointCloud<pcl::Normal>::Ptr cloud_normals)
+{
 }
 
 int main(int argc, char** argv)

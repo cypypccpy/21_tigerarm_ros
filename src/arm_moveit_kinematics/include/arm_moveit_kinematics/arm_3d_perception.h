@@ -4,7 +4,6 @@
 #include <math.h>
 #include <algorithm>
 #include <tf/transform_broadcaster.h>
-#include "cv-helpers.hpp"
 #include "detect.h"
 #include "PlaneExtract.h"
 #include <geometry_msgs/PoseStamped.h>
@@ -13,6 +12,9 @@
 #include <std_msgs/Int32.h>
 
 #include <sensor_msgs/PointCloud2.h>
+#include <pcl_conversions/pcl_conversions.h>
+#include <pcl/filters/passthrough.h>
+#include <pcl/kdtree/kdtree.h>
 
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <moveit_msgs/CollisionObject.h>
@@ -21,12 +23,17 @@ class Arm3DPerception {
     public:
         explicit Arm3DPerception();
 
-        //void cloudCB(const sensor_msgs::PointCloud2ConstPtr& input);
-        void DepthCB(const sensor_msgs::ImageConstPtr& input);
+        void CloudCB(const sensor_msgs::PointCloud2ConstPtr& point);
+
+        void DepthCB(const sensor_msgs::ImageConstPtr& image_raw);
 
         void key_recv_callback(const std_msgs::Int32& msg);
 
-        void detect_mineral(cv::Mat& src_img);
+        void detect_roi(cv::Mat& src_img);
+
+        void passThroughFilter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
+
+        void computeNormals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, pcl::PointCloud<pcl::Normal>::Ptr cloud_normals);
 
         ~Arm3DPerception() {};
 

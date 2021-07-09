@@ -27,6 +27,8 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   sensor_msgs
   image_transport
+  pcl_ros
+  pcl_conversions
 )
 
 add_subdirectory(OpenYolo/detect)
@@ -198,7 +200,6 @@ target_link_libraries(arm_3d_perception
   ${catkin_LIBRARIES}
   detect
   PlaneExtract
-  realsense2
 )
 #############
 ## Install ##
