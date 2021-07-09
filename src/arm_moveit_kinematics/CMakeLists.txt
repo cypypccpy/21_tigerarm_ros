@@ -8,6 +8,7 @@ add_compile_options(-std=c++11)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
+find_package(OpenCV REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
   cmake_modules
   interactive_markers
@@ -22,6 +23,10 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   message_generation
   serial
+  tf
+  cv_bridge
+  sensor_msgs
+  image_transport
 )
 
 add_subdirectory(OpenYolo/detect)
@@ -189,10 +194,11 @@ target_link_libraries(arm_joints_controller_node
   ${catkin_LIBRARIES}
 )
 
-target_link_libraries(
+target_link_libraries(arm_3d_perception
   ${catkin_LIBRARIES}
   detect
   PlaneExtract
+  realsense2
 )
 #############
 ## Install ##
