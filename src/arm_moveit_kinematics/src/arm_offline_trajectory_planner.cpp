@@ -14,8 +14,18 @@ void ArmJointsControllerNode::set_offline_pose() {
     offline_planning_queue.push_back(offline_planning_);
     std::vector<geometry_msgs::Pose>().swap(g_pose_muilt_target); 
 
-    
+    //抢完矿抬升
     pose_name = {"pick_up", "pre_place", "place"};
+    set_target_pose(pose_name);
+    offline_planning_.g_pose_offline_target_ = g_pose_muilt_target;
+    offline_planning_.speed_scale_ = 0.85;
+    offline_planning_.joint_begin_position_ = {0, -0.6686, 0.562822, 0, -0.0139922, -0.001};
+    offline_planning_queue.push_back(offline_planning_);
+
+    std::vector<geometry_msgs::Pose>().swap(g_pose_muilt_target); 
+
+    //没抢到矿缩手
+    pose_name = {"pre_pick_island2"};
     set_target_pose(pose_name);
     offline_planning_.g_pose_offline_target_ = g_pose_muilt_target;
     offline_planning_.speed_scale_ = 0.85;
@@ -65,7 +75,7 @@ void ArmJointsControllerNode::offline_move_task(const int& index) {
     auto tic = ros::Time::now();
     move_group_interface.execute(my_offline_plan[index]);
     auto toc = ros::Time::now() - tic;
-    ROS_INFO("Execute time %.2fms", toc.toSec() * 1000);
+    ROS_INFO("Offline Execute time %.2fms", toc.toSec() * 1000);
 
     if (air_pump_mode_change) {
         arm_states_.air_pump_close = true;
