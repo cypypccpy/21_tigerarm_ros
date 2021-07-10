@@ -201,6 +201,10 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             target_pose_name = {"push"};
             set_target_pose(target_pose_name);
             break;
+        case kv::_i: //捡地上矿
+            target_pose_name = {"pick_ground_mineral"};
+            set_target_pose(target_pose_name);
+            break;
         default:
             g_pose_delta.clear();
             break;

@@ -1,4 +1,4 @@
-Total: 24
+Total: 25
 EffectorLength: 0.05
 Points:
   -
@@ -286,6 +286,18 @@ Points:
       - 0.72
     rpy:
       - -3.09
+      - 0.0000
+      - -1.5758
+    action: 1
+  -
+    tag: pick_ground_mineral #捡地上矿
+    id: 24
+    xyz:
+      - 0.35
+      - 0.00
+      - 0.14
+    rpy:
+      - 2.9897
       - 0.0000
       - -1.5758
     action: 1
