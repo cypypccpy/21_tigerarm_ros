@@ -222,14 +222,14 @@ moveit_msgs::RobotTrajectory ArmJointsControllerNode::compute_trajectory(const s
         success = (move_group_interface->plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
         my_muilt_plan.push_back(my_plan);
         
-        
+        /*
         std::cout << "-----------------轨迹点属性------------------------" << std::endl;        
         for (int j=0;j<my_plan.trajectory_.joint_trajectory.points.size();j++) {
         std::cout << "-----------------one point------------------------" << std::endl;        
             for (int i=0;i<my_plan.trajectory_.joint_trajectory.points[j].positions.size();i++)
                 std::cout << my_plan.trajectory_.joint_trajectory.points[j].positions[i] <<std::endl;
         }
-        
+        */
     
         my_plan.start_state_.joint_state.position = my_plan.trajectory_.joint_trajectory.points.back().positions;
         move_group_interface->setStartState(my_plan.start_state_);

@@ -1,11 +1,9 @@
 #include "arm_moveit_kinematics/arm_3d_perception.h"
 
-Arm3DPerception::Arm3DPerception():yolo("/home/robotlab/Desktop/MineralDetection/yolov3-tiny.cfg",
-                                  "/home/robotlab/Desktop/MineralDetection/yolov3-tiny_final.weights",
-                                  "/home/robotlab/Desktop/MineralDetection/OpenYolo/config/camPara.yml") {
+Arm3DPerception::Arm3DPerception() {
 
-  point_suber_ = node_handle_.subscribe("/camera/depth_registered/points", 1, &Arm3DPerception::CloudCB, this);
-  depth_suber_ = node_handle_.subscribe("/camera/depth_registered/image_raw", 1, &Arm3DPerception::DepthCB, this);
+  //point_suber_ = node_handle_.subscribe("/camera/depth_registered/points", 1, &Arm3DPerception::CloudCB, this);
+  depth_suber_ = node_handle_.subscribe("/camera/color/image_raw", 100, &Arm3DPerception::DepthCB, this);
   keyboard_suber_ = node_handle_.subscribe("arm_keys", 100, &Arm3DPerception::key_recv_callback, this);
 
   image_transport::ImageTransport it = image_transport::ImageTransport(node_handle_);
@@ -34,7 +32,7 @@ void Arm3DPerception::DepthCB(const sensor_msgs::ImageConstPtr& image_raw) {
   ui_puber_.publish(msg1);
   
 };
-
+/*
 void Arm3DPerception::detect_roi(cv::Mat& src_img) {
   yolo_out = yolo.inference(src_img); //推理模型得到结果
 
@@ -65,6 +63,7 @@ void Arm3DPerception::detect_roi(cv::Mat& src_img) {
     yolo_out.boxes[0].height = 478 - yolo_out.boxes[0].y;
   }
 }
+*/
 
 void Arm3DPerception::CloudCB(const sensor_msgs::PointCloud2ConstPtr& point) {
   pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -100,13 +99,13 @@ int main(int argc, char** argv)
 {
   // Initialize ROS
   ros::init(argc, argv, "arm_3d_perception");
+  ros::NodeHandle node_handle;
 
-  ros::AsyncSpinner spinner(4); // four thread
+  Arm3DPerception arm_3d_perception;
+
+  /* Multi threading */
+  ros::AsyncSpinner spinner(2); // two thread
   spinner.start();
-  ros::Duration sleep_t(1.0);
-  sleep_t.sleep();
-
-  Arm3DPerception();
 
   ros::waitForShutdown();
 

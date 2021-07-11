@@ -48,5 +48,5 @@ class Arm3DPerception {
         ros::Subscriber keyboard_suber_;
 
         Object yolo_out;
-        detect yolo;
+        //detect yolo;
 };
