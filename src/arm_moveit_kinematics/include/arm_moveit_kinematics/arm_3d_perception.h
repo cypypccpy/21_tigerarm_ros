@@ -46,7 +46,9 @@ class Arm3DPerception {
         ros::Subscriber point_suber_;
         ros::Subscriber depth_suber_;
         ros::Subscriber keyboard_suber_;
+        ros::Publisher vis_cloud_puber;
 
         Object yolo_out;
+        sensor_msgs::PointCloud2 vis_cloud;
         //detect yolo;
 };

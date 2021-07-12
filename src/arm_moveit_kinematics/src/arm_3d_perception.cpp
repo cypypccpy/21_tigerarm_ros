@@ -8,6 +8,8 @@ Arm3DPerception::Arm3DPerception() {
 
   image_transport::ImageTransport it = image_transport::ImageTransport(node_handle_);
   ui_puber_ = it.advertise("camera/image", 100);
+  vis_cloud_puber = node_handle_.advertise<sensor_msgs::PointCloud2>("/camera/vis_cloud", 100);
+
 }
 
 void Arm3DPerception::key_recv_callback(const std_msgs::Int32& msg) {
@@ -84,7 +86,7 @@ void Arm3DPerception::passThroughFilter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr c
   pass.setInputCloud(cloud);
   pass.setFilterFieldName("z");
   // min and max values in z axis to keep
-  pass.setFilterLimits(0.3, 1.1);
+  pass.setFilterLimits(0.5, 1.0);
   pass.filter(*cloud);
 }
 
@@ -93,6 +95,8 @@ void Arm3DPerception::passThroughFilter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr c
     @param cloud_normals - The point normals once computer will be stored in this. */
 void Arm3DPerception::computeNormals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, pcl::PointCloud<pcl::Normal>::Ptr cloud_normals)
 {
+  pcl::toROSMsg(*cloud, vis_cloud);
+  vis_cloud_puber.publish(vis_cloud);
 }
 
 int main(int argc, char** argv)
