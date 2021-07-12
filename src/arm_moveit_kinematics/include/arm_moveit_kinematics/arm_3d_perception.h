@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <tf/transform_broadcaster.h>
 #include "detect.h"
-#include "PlaneExtract.h"
 #include <geometry_msgs/PoseStamped.h>
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
@@ -15,6 +14,9 @@
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/filters/passthrough.h>
 #include <pcl/kdtree/kdtree.h>
+
+#include <pcl/filters/extract_indices.h>
+#include <pcl/features/normal_3d.h>
 
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <moveit_msgs/CollisionObject.h>
