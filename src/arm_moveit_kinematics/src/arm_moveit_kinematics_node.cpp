@@ -181,7 +181,7 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             break;
         case kv::_j: //矿石位姿不对转一转后兑换
             air_pump_mode_change = true;
-            target_pose_name = {"pre_exchange21", "pre_exchange22"};
+            target_pose_name = {"pre_exchange21", "pre_exchange22", "exchange2"};
             set_target_pose(target_pose_name);
             break;
         case kv::_k: //挥一拳
