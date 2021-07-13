@@ -19,7 +19,7 @@ void ArmJointsControllerNode::set_offline_pose() {
     set_target_pose(pose_name);
     offline_planning_.g_pose_offline_target_ = g_pose_muilt_target;
     offline_planning_.speed_scale_ = 0.85;
-    offline_planning_.joint_begin_position_ = {0, -0.6729288, 0.6452, 0.0, 0.0636, -0.001};
+    offline_planning_.joint_begin_position_ = {0, -0.69117, 0.67166, 0.0, 0.07228, -0.001};
     offline_planning_queue.push_back(offline_planning_);
 
     std::vector<geometry_msgs::Pose>().swap(g_pose_muilt_target); 
@@ -29,7 +29,7 @@ void ArmJointsControllerNode::set_offline_pose() {
     set_target_pose(pose_name);
     offline_planning_.g_pose_offline_target_ = g_pose_muilt_target;
     offline_planning_.speed_scale_ = 0.71;
-    offline_planning_.joint_begin_position_ = {0, -0.6729288, 0.6452, 0.0, 0.0636, -0.001};
+    offline_planning_.joint_begin_position_ = {0, -0.69117, 0.67166, 0.0, 0.07228, -0.001};
     offline_planning_queue.push_back(offline_planning_);
 
     std::vector<geometry_msgs::Pose>().swap(g_pose_muilt_target); 

@@ -15,9 +15,6 @@
 #include <pcl/filters/passthrough.h>
 #include <pcl/kdtree/kdtree.h>
 
-#include <pcl/filters/extract_indices.h>
-#include <pcl/features/normal_3d.h>
-
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <moveit_msgs/CollisionObject.h>
 

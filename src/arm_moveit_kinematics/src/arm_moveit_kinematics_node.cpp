@@ -123,8 +123,8 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             target_pose_name = {"pick_up", "pre_exchange"};
             set_target_pose(target_pose_name);
             break;
-        case kv::_t: //抓取障碍块并放于前端
-            target_pose_name = {"pick_block", "pick_front2"};
+        case kv::_t: //障碍块放于前端
+            target_pose_name = {"pick_front2"};
             set_target_pose(target_pose_name);
             break;
         case kv::_r: //开车模式
@@ -181,7 +181,7 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             break;
         case kv::_j: //矿石位姿不对转一转后兑换
             air_pump_mode_change = true;
-            target_pose_name = {"pre_exchange2", "exchange2"};
+            target_pose_name = {"pre_exchange21", "pre_exchange22"};
             set_target_pose(target_pose_name);
             break;
         case kv::_k: //挥一拳

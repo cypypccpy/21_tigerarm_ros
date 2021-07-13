@@ -1,4 +1,4 @@
-Total: 25
+Total: 26
 EffectorLength: 0.05
 Points:
   -
@@ -41,7 +41,7 @@ Points:
     tag: pick_island #手动抓取矿石
     id: 3
     xyz:
-      - 0.517
+      - 0.52
       - 0.00
       - 0.562
     rpy:
@@ -65,16 +65,16 @@ Points:
     tag: pre_pick_block #准备抓取障碍块
     id: 5
     xyz:
-      - 0.28
+      - 0.35
       - -0.00
-      - 0.61
+      - 0.20
     rpy:
-      - 2.5145
-      - -0.0033
+      - 2.2989
+      - -0.0061
       - -1.5751
     action: 1
   -
-    tag: pick_block #抓取障碍块
+    tag: pick_block #抓取障碍块(废弃？)
     id: 6
     xyz:
       - 0.56
@@ -86,7 +86,7 @@ Points:
       - -1.5773
     action: 1
   -
-    tag: pick_front1 #障碍块放置前端
+    tag: pick_front1 #障碍块放置前端(feiqi?)
     id: 7
     xyz:
       - 0.30
@@ -103,7 +103,7 @@ Points:
     xyz:
       - 0.31
       - 0.00
-      - 0.42
+      - 0.31
     rpy:
       - 2.3777
       - -0.0055
@@ -170,16 +170,16 @@ Points:
       - -3.0982
     action: 1
   -
-    tag: pre_exchange2 #矿石位姿不对的时候转一转
+    tag: pre_exchange22 #矿石位姿不对的时候转一转
     id: 14
     xyz:
       - 0.27
       - 0.00
       - 0.83
     rpy:
-      - -0.3166
-      - -0.0013
-      - 1.5667
+      - -0.3
+      - -0.0036
+      - 1.5661
     action: 1
   -
     tag: exchange2 #转完之后的兑换
@@ -300,4 +300,16 @@ Points:
       - 2.9897
       - 0.0000
       - -1.5758
+    action: 1
+  -
+    tag: pre_exchange21 #矿石位姿不对的时候转一转中间站
+    id: 25
+    xyz:
+      - 0.27
+      - 0.00
+      - 0.83
+    rpy:
+      - 1.0522
+      - -0.0036
+      - 1.5661
     action: 1
