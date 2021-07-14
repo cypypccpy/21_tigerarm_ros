@@ -181,7 +181,8 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             break;
         case kv::_j: //矿石位姿不对转一转后兑换
             air_pump_mode_change = true;
-            target_pose_name = {"pre_exchange21", "pre_exchange22", "exchange2"};
+
+            target_pose_name = {"pre_exchange21", "pre_exchange22"};
             set_target_pose(target_pose_name);
             break;
         case kv::_k: //挥一拳
@@ -219,17 +220,18 @@ moveit_msgs::RobotTrajectory ArmJointsControllerNode::compute_trajectory(const s
     //通过目标点计算轨迹
     for (int i = 0; i < g_pose_muilt_target_.size(); i++) {
         move_group_interface->setPoseTarget(g_pose_muilt_target_[i]);
+
         success = (move_group_interface->plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
         my_muilt_plan.push_back(my_plan);
         
-        /*
+        
         std::cout << "-----------------轨迹点属性------------------------" << std::endl;        
         for (int j=0;j<my_plan.trajectory_.joint_trajectory.points.size();j++) {
         std::cout << "-----------------one point------------------------" << std::endl;        
             for (int i=0;i<my_plan.trajectory_.joint_trajectory.points[j].positions.size();i++)
                 std::cout << my_plan.trajectory_.joint_trajectory.points[j].positions[i] <<std::endl;
         }
-        */
+        
     
         my_plan.start_state_.joint_state.position = my_plan.trajectory_.joint_trajectory.points.back().positions;
         move_group_interface->setStartState(my_plan.start_state_);
@@ -339,6 +341,7 @@ void ArmJointsControllerNode::move_task() {
 void ArmJointsControllerNode::set_target_pose(const std::vector<std::string>& target_pose_name) {
     for(int i = 0; i < target_pose_name.size(); i++) {
         g_next_point = pl[target_pose_name[i]];
+
         g_pose_muilt_target.push_back(g_next_point.pose);
     }
     g_pose_target = g_next_point.pose;

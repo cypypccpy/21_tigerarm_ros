@@ -47,7 +47,7 @@ class Arm3DPerception {
 
     private:
         bool points_not_found = true;
-        bool aim = false;
+        bool aim;
 
         ros::NodeHandle node_handle_;
         image_transport::Publisher ui_puber_;

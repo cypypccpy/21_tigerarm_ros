@@ -11,6 +11,8 @@
 
 #include <moveit_visual_tools/moveit_visual_tools.h>
 #include <moveit/trajectory_processing/iterative_time_parameterization.h>
+#include <moveit/kinematic_constraints/utils.h>
+
 
 #include <std_msgs/Int32.h>
 

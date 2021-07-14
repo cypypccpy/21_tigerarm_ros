@@ -1,6 +1,6 @@
 #include "arm_moveit_kinematics/arm_3d_perception.h"
 
-Arm3DPerception::Arm3DPerception() {
+Arm3DPerception::Arm3DPerception():aim(false) {
 
   //point_suber_ = node_handle_.subscribe("/camera/depth_registered/points", 1, &Arm3DPerception::CloudCB, this);
   depth_suber_ = node_handle_.subscribe("/camera/color/image_raw", 100, &Arm3DPerception::DepthCB, this);
