@@ -10,12 +10,10 @@
                 "/opt/ros/melodic/include/**",
                 "/home/robotlab/project/21_tigerarm_ros/src/arm_moveit_kinematics/include/**",
                 "/home/robotlab/project/21_tigerarm_ros/src/mineral_detect/include/**",
-                "/usr/include/**",
-                "${workspaceFolder}/arm_moveit_kinematics/OpenYolo/detect/include",
-                "${workspaceFolder}/mineral_detect/PlaneExtract/include",
-                "/usr/local/include/opencv4"
+                "/usr/include/**"
             ],
-            "name": "ROS"
+            "name": "ROS",
+            "configurationProvider": "ms-vscode.cmake-tools"
         }
     ],
     "version": 4

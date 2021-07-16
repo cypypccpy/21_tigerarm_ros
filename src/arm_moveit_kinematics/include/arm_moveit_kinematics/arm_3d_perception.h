@@ -56,7 +56,7 @@ class Arm3DPerception {
         ros::Subscriber keyboard_suber_;
         ros::Publisher vis_cloud_puber;
 
-        Object yolo_out;
+        //Object yolo_out;
         sensor_msgs::PointCloud2 vis_cloud;
         //detect yolo;
 };

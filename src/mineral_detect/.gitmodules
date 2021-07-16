@@ -1,0 +1,6 @@
+[submodule "OpenYolo"]
+	path = OpenYolo
+	url = https://git.scutbot.cn/hzx/OpenYolo.git
+[submodule "PlaneExtract"]
+	path = PlaneExtract
+	url = https://git.scutbot.cn/hzx/PlaneExtract.git

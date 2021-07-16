@@ -1,4 +1,4 @@
-Total: 26
+Total: 27
 EffectorLength: 0.05
 Points:
   -
@@ -312,4 +312,16 @@ Points:
       - 1.0522
       - -0.0036
       - 1.5661
+    action: 1
+  -
+    tag: drive2 #开车姿态
+    id: 26
+    xyz:
+      - 0.24
+      - 0.00
+      - 0.56
+    rpy:
+      - 3.1336
+      - -0.0000
+      - -1.5611
     action: 1

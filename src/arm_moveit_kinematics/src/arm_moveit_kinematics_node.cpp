@@ -206,6 +206,10 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             target_pose_name = {"pick_ground_mineral"};
             set_target_pose(target_pose_name);
             break;
+        case kv::_o: //开车2
+            target_pose_name = {"drive2"};
+            set_target_pose(target_pose_name);
+            break;
         default:
             g_pose_delta.clear();
             break;

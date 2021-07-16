@@ -1,38 +1,30 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(arm_moveit_kinematics)
-SET(CMAKE_BUILD_TYPE Debug)
+project(mineral_detect)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+# add_compile_options(-std=c++11)
 
+set(OpenCV_DIR /home/robotlab/Documents/opencv-master/build)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
+find_package(OpenCV REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
-  cmake_modules
-  interactive_markers
-  moveit_core
-  moveit_ros_perception
-  moveit_ros_planning_interface
-  moveit_visual_tools
-  moveit_msgs
-  pluginlib
   roscpp
+  rospy
   std_msgs
-  sensor_msgs
   message_generation
-  serial
   tf
   cv_bridge
-  sensor_msgs
   image_transport
-  pcl_ros
-  pcl_conversions
+  sensor_msgs
 )
+add_subdirectory(OpenYolo/detect)
+add_subdirectory(PlaneExtract)
 
-# add_subdirectory(OpenYolo/detect)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -66,10 +58,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  joint_plots.msg
-  arm_states.msg
-#   Message1.msg
-#   Message2.msg
+  Mineral.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -86,7 +75,7 @@ add_message_files(
 #   Action2.action
 # )
 
-## Generate added messages and services with any dependencies listed here
+# Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
   std_msgs
@@ -122,11 +111,10 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES arm_moveit_kinematics
-#  CATKIN_DEPENDS cmake_modules interactive_markers moveit_core moveit_ros_perception moveit_ros_planning_interface pluginlib roscpp std_msgs
-#  DEPENDS system_lib
-  CATKIN_DEPENDS message_runtime
+ INCLUDE_DIRS include
+ LIBRARIES mineral_detect
+ CATKIN_DEPENDS roscpp rospy std_msgs message_runtime cv_bridge image_transport sensor_msgs
+ DEPENDS system_lib
 )
 
 ###########
@@ -136,18 +124,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
-  ${catkin_INCLUDE_DIRS}
-  ${PCL_INCLUDE_DIRS}
   include
-  /usr/local/include
+  ${catkin_INCLUDE_DIRS}
 )
-
-link_directories(/home/robotlab/yaml-cpp-0.6.3/build)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/arm_moveit_kinematics.cpp
+#   src/${PROJECT_NAME}/mineral_detect.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -158,12 +141,8 @@ link_directories(/home/robotlab/yaml-cpp-0.6.3/build)
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}_node src/arm_moveit_kinematics_node.cpp)
-add_executable(arm_keyboard_node src/arm_keyboard_node.cpp)
-add_executable(arm_joints_controller_node src/arm_joints_controller_node.cpp)
-add_executable(arm_3d_perception src/arm_3d_perception.cpp)
+add_executable(${PROJECT_NAME}_node src/main.cpp)
 
-add_library(arm_offline_trajectory_planner src/arm_offline_trajectory_planner.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -175,29 +154,14 @@ add_library(arm_offline_trajectory_planner src/arm_offline_trajectory_planner.cp
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(arm_offline_trajectory_planner
-  ${catkin_LIBRARIES}
-)
+ target_link_libraries(${PROJECT_NAME}_node
 
-target_link_libraries(${PROJECT_NAME}_node
-  ${catkin_LIBRARIES}
-  ${Boost_LIBRARIES}
-  yaml-cpp
-  arm_offline_trajectory_planner
-)
+  ${catkin_LIBRARIES} realsense2 ${OpenCV_LIBS}  detect PlaneExtract
 
-target_link_libraries(arm_keyboard_node
-  ${catkin_LIBRARIES}
-)
+  ${catkin_LIBRARIES} realsense2 ${OpenCV_LIBS}  detect PlaneExtract
 
-target_link_libraries(arm_joints_controller_node
-  ${catkin_LIBRARIES}
-)
+  )
 
-target_link_libraries(arm_3d_perception
-  ${catkin_LIBRARIES}
-  detect
-)
 #############
 ## Install ##
 #############
@@ -214,15 +178,9 @@ target_link_libraries(arm_3d_perception
 
 ## Mark executables for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_executables.html
-install(TARGETS ${PROJECT_NAME}_node
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-install(TARGETS arm_keyboard_node
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-install(TARGETS arm_joints_controller_node
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+ install(TARGETS ${PROJECT_NAME}_node
+   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+ )
 
 ## Mark libraries for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_libraries.html
@@ -238,7 +196,6 @@ install(TARGETS arm_joints_controller_node
 #   FILES_MATCHING PATTERN "*.h"
 #   PATTERN ".svn" EXCLUDE
 # )
-install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
@@ -252,7 +209,7 @@ install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_arm_moveit_kinematics.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_mineral_detect.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
