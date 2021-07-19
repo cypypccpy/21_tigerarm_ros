@@ -15,9 +15,7 @@ Panels:
         - /Path1
         - /Path2
         - /LaserScan1
-        - /LaserScan1/Status1
         - /LaserScan2
-        - /LaserScan2/Status1
       Splitter Ratio: 0.7425600290298462
     Tree Height: 608
   - Class: rviz/Help
@@ -54,7 +52,7 @@ Visualization Manager:
       Value: true
     - Acceleration_Scaling_Factor: 1
       Class: moveit_rviz_plugin/MotionPlanning
-      Enabled: true
+      Enabled: false
       Move Group Namespace: ""
       MoveIt_Allow_Approximate_IK: false
       MoveIt_Allow_External_Program: false
@@ -85,41 +83,6 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
-          arm:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          base_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          forearm:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          pitch_spindle:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          roll_spindle:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          shoulder:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          yaw_spindle:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
         Loop Animation: true
         Robot Alpha: 0.5
         Robot Color: 150; 50; 150
@@ -165,45 +128,10 @@ Visualization Manager:
           Expand Link Details: false
           Expand Tree: false
           Link Tree Style: Links in Alphabetic Order
-          arm:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          base_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          forearm:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          pitch_spindle:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          roll_spindle:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          shoulder:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          yaw_spindle:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
         Robot Alpha: 1
         Show Robot Collision: true
         Show Robot Visual: true
-      Value: true
+      Value: false
       Velocity_Scaling_Factor: 1
     - Alpha: 1
       Autocompute Intensity Bounds: true
@@ -475,7 +403,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: base_laser_link
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -494,25 +422,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 5.782210350036621
+      Distance: 9.215231895446777
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.7216215133666992
-        Y: -0.500229001045227
-        Z: 2.2351798634190345e-7
+        X: -0.15977013111114502
+        Y: 0.2356504201889038
+        Z: 2.2351787265506573e-7
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3247971534729004
+      Pitch: 0.8197968006134033
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 2.8149752616882324
+      Yaw: 2.943115711212158
     Saved: ~
 Window Geometry:
   Displays:
@@ -531,4 +459,4 @@ Window Geometry:
     collapsed: false
   Width: 1389
   X: 531
-  Y: 296
+  Y: 206
