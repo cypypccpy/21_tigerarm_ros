@@ -1,6 +1,6 @@
 #include "arm_moveit_kinematics/arm_3d_perception.h"
 
-Arm3DPerception::Arm3DPerception():aim(false) {
+Arm3DPerception::Arm3DPerception():aim(false), overload(false) {
 
   //point_suber_ = node_handle_.subscribe("/camera/depth_registered/points", 1, &Arm3DPerception::CloudCB, this);
   depth_suber_ = node_handle_.subscribe("/camera/color/image_raw", 100, &Arm3DPerception::DepthCB, this);
@@ -18,6 +18,9 @@ void Arm3DPerception::key_recv_callback(const std_msgs::Int32& msg) {
   }
   else
     aim = false;
+  if (msg.data == 255) {
+    overload = true;
+  }
 }
 
 void Arm3DPerception::DepthCB(const sensor_msgs::ImageConstPtr& image_raw) {
@@ -27,6 +30,11 @@ void Arm3DPerception::DepthCB(const sensor_msgs::ImageConstPtr& image_raw) {
   if (aim == true) {
     Rect r(212, 241, 294, 174);
     rectangle(src_img, r, Scalar(0, 0, 255), 2);
+  }
+
+  if (overload) {
+    circle(src_img, cv::Point2f(320, 240), 50, cv::Scalar(0, 0, 255), 2);
+    overload = false;
   }
 
   //发布图片消息
