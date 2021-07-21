@@ -36,12 +36,17 @@ class Arm3DPerception {
 
         void computeNormals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, pcl::PointCloud<pcl::Normal>::Ptr cloud_normals);
 
-        void removePlaneSurface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, pcl::PointIndices::Ptr inliers_plane);
+        void extractPlaneSurface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, pcl::PointIndices::Ptr inliers_plane);
 
         void extractPlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, pcl::ModelCoefficients::Ptr coefficients_plane,
                                                                             pcl::PointCloud<pcl::Normal>::Ptr cloud_normals);
 
         void extractNormals(pcl::PointCloud<pcl::Normal>::Ptr cloud_normals, pcl::PointIndices::Ptr inliers_plane);
+
+        void cal6DoFPose(pcl::PointCloud<pcl::Normal>::Ptr cloud_normals, Eigen::Vector4f centroid);
+
+        void postProcessFilter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud);
+
 
         ~Arm3DPerception() {};
 
@@ -56,6 +61,7 @@ class Arm3DPerception {
         ros::Subscriber depth_suber_;
         ros::Subscriber keyboard_suber_;
         ros::Publisher vis_cloud_puber;
+        ros::Publisher mineral_pose_puber;
 
         //Object yolo_out;
         sensor_msgs::PointCloud2 vis_cloud;

@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
   rs2::align align_to(RS2_STREAM_COLOR);
   Object yolo_out;
   detect yolo("/home/robotlab/Desktop/yolov3-tiny.cfg", "/home/robotlab/Desktop/yolov3-tiny_final.weights", "/home/robotlab/Desktop/camPara.yml");
+
   //---------------------------------崔桐欣代码test------------------------------------
   //cv::VideoWriter writer;
   //writer.open("/home/robotlab/Desktop/video.mp4", cv::VideoWriter::fourcc('M', 'P', '4', '2'), 5, cv::Size(640, 480));

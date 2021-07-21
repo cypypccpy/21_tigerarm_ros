@@ -2,13 +2,15 @@
 
 Arm3DPerception::Arm3DPerception():aim(false), overload(false) {
 
-  //point_suber_ = node_handle_.subscribe("/camera/depth_registered/points", 1, &Arm3DPerception::CloudCB, this);
+  point_suber_ = node_handle_.subscribe("/camera/depth_registered/points", 1, &Arm3DPerception::CloudCB, this);
   depth_suber_ = node_handle_.subscribe("/camera/color/image_raw", 100, &Arm3DPerception::DepthCB, this);
   keyboard_suber_ = node_handle_.subscribe("arm_keys", 100, &Arm3DPerception::key_recv_callback, this);
 
   image_transport::ImageTransport it = image_transport::ImageTransport(node_handle_);
   ui_puber_ = it.advertise("camera/image", 100);
+
   vis_cloud_puber = node_handle_.advertise<sensor_msgs::PointCloud2>("/camera/vis_cloud", 100);
+  mineral_pose_puber = node_handle_.advertise<geometry_msgs::PoseStamped>("/mineral_detect", 100);
 
 }
 
@@ -86,7 +88,24 @@ void Arm3DPerception::CloudCB(const sensor_msgs::PointCloud2ConstPtr& point) {
   computeNormals(cloud, cloud_normals);
   //计算内平面
   pcl::PointIndices::Ptr inliers_plane(new pcl::PointIndices);
-  removePlaneSurface(cloud, inliers_plane);
+  extractPlaneSurface(cloud, inliers_plane);
+
+  extractNormals(cloud_normals, inliers_plane);
+
+  postProcessFilter(cloud);
+
+  // 创建存储点云重心的对象
+  Eigen::Vector4f centroid;
+  
+  pcl::compute3DCentroid(*cloud, centroid);
+
+  std::cout << "The XYZ coordinates of the centroid are: ("
+            << centroid[0] << ", "
+            << centroid[1] << ", "
+            << centroid[2] << ")." << std::endl;
+
+  pcl::toROSMsg(*cloud, vis_cloud);
+  vis_cloud_puber.publish(vis_cloud);
 
 }
 //--------------------------tool----------------------------------
@@ -99,7 +118,7 @@ void Arm3DPerception::passThroughFilter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr c
   pass.setInputCloud(cloud);
   pass.setFilterFieldName("z");
   // min and max values in z axis to keep
-  pass.setFilterLimits(0.5, 1.0);
+  pass.setFilterLimits(0.5, 3);
   pass.filter(*cloud);
 }
 
@@ -116,14 +135,12 @@ void Arm3DPerception::computeNormals(pcl::PointCloud<pcl::PointXYZRGB>::Ptr clou
   ne.setKSearch(50);
   ne.compute(*cloud_normals);
 
-  pcl::toROSMsg(*cloud, vis_cloud);
-  vis_cloud_puber.publish(vis_cloud);
 }
 
 /** \brief Given the pointcloud and indices of the plane, remove the plannar region from the pointcloud.
     @param cloud - Pointcloud.
     @param inliers_plane - Indices representing the plane. */
-void Arm3DPerception::removePlaneSurface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, pcl::PointIndices::Ptr inliers_plane)
+void Arm3DPerception::extractPlaneSurface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud, pcl::PointIndices::Ptr inliers_plane)
 {
   // create a SAC segmenter without using normals
   pcl::SACSegmentation<pcl::PointXYZRGB> segmentor;
@@ -142,8 +159,8 @@ void Arm3DPerception::removePlaneSurface(pcl::PointCloud<pcl::PointXYZRGB>::Ptr 
   pcl::ExtractIndices<pcl::PointXYZRGB> extract_indices;
   extract_indices.setInputCloud(cloud);
   extract_indices.setIndices(inliers_plane);
-  /* Remove the planar inliers, extract the rest */
-  extract_indices.setNegative(true);
+  /* extract the planar inliers, remove the rest */
+  extract_indices.setNegative(false);
   extract_indices.filter(*cloud);
 }
 
@@ -195,6 +212,43 @@ void Arm3DPerception::extractPlane(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,
   extract.filter(*cloud);
 }
 
+void Arm3DPerception::postProcessFilter(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud) {
+  double upper_z = 1.0;
+  
+  for (auto const point : cloud->points) {
+    if (point.z < upper_z) {
+      upper_z = point.z;
+    }
+  }
+
+  ROS_INFO("upper_z: %f", upper_z);
+
+  pcl::PassThrough<pcl::PointXYZRGB> pass;
+  pass.setInputCloud(cloud);
+  pass.setFilterFieldName("z");
+  // min and max values in z axis to keep
+  pass.setFilterLimits(0.5, upper_z + 0.1);
+  pass.filter(*cloud);
+
+}
+
+void Arm3DPerception::cal6DoFPose(pcl::PointCloud<pcl::Normal>::Ptr cloud_normals, Eigen::Vector4f centroid) {
+
+  geometry_msgs::PoseStamped mineral_pose;
+  mineral_pose.header.frame_id = "camera_depth_frame";
+  mineral_pose.header.stamp = ros::Time();
+  mineral_pose.pose.position.z = centroid[2];
+  mineral_pose.pose.position.y = centroid[1];
+  mineral_pose.pose.position.x = centroid[0];
+  geometry_msgs::Quaternion q;
+
+  q = tf::createQuaternionMsgFromRollPitchYaw(3.00,
+                                              1.57,
+                                              3.14); //取出方向存储于四元数
+  
+  mineral_pose.pose.orientation = q;
+  mineral_pose_puber.publish(mineral_pose);
+}
 
 int main(int argc, char** argv)
 {
