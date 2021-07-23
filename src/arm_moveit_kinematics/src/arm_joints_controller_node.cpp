@@ -73,7 +73,7 @@ void joint_states_recv_callback(const sensor_msgs::JointStateConstPtr& msg)
         for(size_t i = 0; i < 2; i++){
             memcpy(&g_serial_buffer[1*i + 24], &arm_states_buffer[i], 1); //int8-->1Bytes
         }
-
+        std::cout << arm_states_recv  << std::endl;
         if(g_serial_port_ptr){
             g_serial_port_ptr->write(g_serial_buffer, 1*2 + 6*4);
         }

@@ -119,6 +119,7 @@ class ArmJointsControllerNode {
         ros::Subscriber key_suber_;
         ros::Subscriber mineral_suber_;
         ros::Publisher arm_puber_;
+        ros::Publisher key_msg_puber;
 
         arm_moveit_kinematics::arm_states arm_states_;
 

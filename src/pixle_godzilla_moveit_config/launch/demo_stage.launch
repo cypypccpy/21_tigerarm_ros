@@ -31,7 +31,7 @@
 
   <node pkg="tf" type="static_transform_publisher" name="base_link_realsense_broadcaster" args="0.06 0.01 -0.06 0 0 3.141592 forearm camera_link 100" />
 
-  <node pkg="tf" name="tf_2Dlidar" type="static_transform_publisher" args="0 0 0 1.57 0 0 base_link base_laser_link 50"/>
+  <node pkg="tf" name="tf_2Dlidar" type="static_transform_publisher" args="0 0.25 0.3 1.57 0 0 base_link base_laser_link 50"/>
 
   <include file="$(find realsense2_camera)/launch/rs_rgbd.launch">
   </include>

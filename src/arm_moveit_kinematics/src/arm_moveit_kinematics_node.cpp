@@ -10,6 +10,8 @@ ArmJointsControllerNode::ArmJointsControllerNode(): arm_pose_updated(false),
     key_suber_ = node_handle_.subscribe("arm_keys", 100, &ArmJointsControllerNode::key_recv_callback, this);
     mineral_suber_ = node_handle_.subscribe("mineral_detect", 100, &ArmJointsControllerNode::mineral_pose_callback, this);
     arm_puber_ = node_handle_.advertise<arm_moveit_kinematics::arm_states>("arm_states", 100);
+    key_msg_puber = node_handle_.advertise<std_msgs::Int32>("arm_keys", 100);
+
 
     /* Load poses and action group */
     std::string pose_yaml_path, stl_resource_path;
@@ -57,6 +59,11 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
 
     /* clear last */
     g_pose_delta.clear();
+
+    if (msg.data == 300) {
+        arm_states_.execute_finished = true;
+        arm_puber_.publish(arm_states_);
+    }
 
     switch(msg.data){
         case kv::_w:
@@ -128,7 +135,7 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             set_target_pose(target_pose_name);
             break;
         case kv::_r: //开车模式
-            target_pose_name = {"drive"};
+            target_pose_name = {"drive2"};
             set_target_pose(target_pose_name);
             break;
         case kv::_q: //准备抓取矿石姿态
@@ -203,11 +210,13 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             set_target_pose(target_pose_name);
             break;
         case kv::_i: //捡地上矿
-            target_pose_name = {"pick_ground_mineral"};
+            air_pump_mode_change = true;
+            
+            target_pose_name = {"pick_ground_mineral", "pick_block"};
             set_target_pose(target_pose_name);
             break;
         case kv::_o: //开车2
-            target_pose_name = {"drive2"};
+            target_pose_name = {"pick_ground_mineral", "pick_block", "pre_exchange"};
             set_target_pose(target_pose_name);
             break;
         default:
@@ -228,14 +237,14 @@ moveit_msgs::RobotTrajectory ArmJointsControllerNode::compute_trajectory(const s
         success = (move_group_interface->plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
         my_muilt_plan.push_back(my_plan);
         
-        
+        /*
         std::cout << "-----------------轨迹点属性------------------------" << std::endl;        
         for (int j=0;j<my_plan.trajectory_.joint_trajectory.points.size();j++) {
         std::cout << "-----------------one point------------------------" << std::endl;        
             for (int i=0;i<my_plan.trajectory_.joint_trajectory.points[j].positions.size();i++)
                 std::cout << my_plan.trajectory_.joint_trajectory.points[j].positions[i] <<std::endl;
         }
-        
+        */
     
         my_plan.start_state_.joint_state.position = my_plan.trajectory_.joint_trajectory.points.back().positions;
         move_group_interface->setStartState(my_plan.start_state_);
@@ -320,6 +329,9 @@ void ArmJointsControllerNode::move_task() {
             std::vector<geometry_msgs::Pose>().swap(g_pose_muilt_target);  
             std::vector<moveit::planning_interface::MoveGroupInterface::Plan>().swap(my_muilt_plan);  
 
+            std_msgs::Int32 res_;
+            res_.data = 301;
+            key_msg_puber.publish(res_);
             /* Operation */
             switch(g_next_point.action_t){
                 case PICKUP:

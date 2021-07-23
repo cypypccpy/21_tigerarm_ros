@@ -6,7 +6,6 @@ Panels:
       Expanded:
         - /Global Options1
         - /Grid1
-        - /MotionPlanning1
         - /MotionPlanning1/Scene Robot1
         - /MotionPlanning1/Planning Request1
         - /MotionPlanning1/Planned Path1
@@ -367,7 +366,7 @@ Visualization Manager:
       Max Color: 255; 255; 255
       Max Intensity: 7
       Min Color: 0; 0; 0
-      Min Intensity: 3
+      Min Intensity: 4
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
@@ -413,25 +412,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 8.524264335632324
+      Distance: 3.1473171710968018
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -1.6491174697875977
-        Y: -0.5500173568725586
-        Z: -2.6375050765636843e-6
+        X: 1.340538501739502
+        Y: 0.03311865031719208
+        Z: -2.7567143661144655e-6
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.029796838760376
+      Pitch: 0.7297971248626709
       Target Frame: base_link
       Value: XYOrbit (rviz)
-      Yaw: 3.4862518310546875
+      Yaw: 0.05810992792248726
     Saved: ~
 Window Geometry:
   Displays:
