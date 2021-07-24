@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
 
     serial::Serial serial_port;
     serial::Timeout serial_timeout = serial::Timeout::simpleTimeout(100); //丢包时间100ms
-    std::string port_name = "/dev/ttyUSB1";
+    std::string port_name = "/dev/ttyUSB0";
     serial_port.setPort(port_name);
     serial_port.setBaudrate(115200);
     serial_port.setTimeout(serial_timeout);

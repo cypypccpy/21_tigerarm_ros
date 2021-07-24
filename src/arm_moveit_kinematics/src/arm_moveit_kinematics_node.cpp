@@ -201,7 +201,7 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             set_target_pose(target_pose_name);
             break;
         case kv::_e: //抓完银矿后的抬升
-            target_pose_name = {"silver_up"};
+            target_pose_name = {"pick_ground_mineral"};
             set_target_pose(target_pose_name);
             break;
         case kv::_u: //兑换完矿石后推入矿槽
@@ -211,12 +211,16 @@ void ArmJointsControllerNode::key_recv_callback(const std_msgs::Int32& msg)
             break;
         case kv::_i: //捡地上矿
             air_pump_mode_change = true;
+            speed_scale = 1;
             
-            target_pose_name = {"pick_ground_mineral", "pick_block"};
+            target_pose_name = {"pre_pick_island"};
             set_target_pose(target_pose_name);
             break;
         case kv::_o: //开车2
-            target_pose_name = {"pick_ground_mineral", "pick_block", "pre_exchange"};
+            speed_scale = 1;
+
+            target_pose_name = {"pick_block", "pre_exchange"};
+            //target_pose_name = {"pick_block"};
             set_target_pose(target_pose_name);
             break;
         default:
