@@ -1,5 +1,0 @@
-<launch>
-  <node name="mineral_detect_node" pkg="mineral_detect" type="mineral_detect_node" respawn="false" output="screen">
-  </node>
-  
-</launch>

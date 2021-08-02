@@ -30,12 +30,12 @@ void Arm3DPerception::DepthCB(const sensor_msgs::ImageConstPtr& image_raw) {
   
   //辅助对准矿石
   if (aim == true) {
-    Rect r(212, 241, 294, 174);
-    rectangle(src_img, r, Scalar(0, 0, 255), 2);
+    cv::Rect r(212, 241, 294, 174);
+    cv::rectangle(src_img, r, cv::Scalar(0, 0, 255), 2);
   }
 
   if (overload) {
-    circle(src_img, cv::Point2f(320, 240), 50, cv::Scalar(0, 0, 255), 2);
+    cv::circle(src_img, cv::Point2f(320, 240), 50, cv::Scalar(0, 0, 255), 2);
     overload = false;
   }
 

@@ -141,6 +141,7 @@ include_directories(
   ${PCL_INCLUDE_DIRS}
   include
   /usr/local/include
+  ${gpmp2_INCLUDE_DIR}
 )
 
 link_directories(/home/robotlab/yaml-cpp-0.6.3/build)
@@ -164,6 +165,7 @@ add_executable(arm_joints_controller_node src/arm_joints_controller_node.cpp)
 add_executable(arm_3d_perception src/arm_3d_perception.cpp)
 
 add_library(arm_offline_trajectory_planner src/arm_offline_trajectory_planner.cpp)
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -196,8 +198,8 @@ target_link_libraries(arm_joints_controller_node
 
 target_link_libraries(arm_3d_perception
   ${catkin_LIBRARIES}
-  detect
 )
+
 #############
 ## Install ##
 #############

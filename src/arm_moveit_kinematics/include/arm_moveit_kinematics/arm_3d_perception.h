@@ -4,7 +4,6 @@
 #include <math.h>
 #include <algorithm>
 #include <tf/transform_broadcaster.h>
-#include "detect.h"
 #include <geometry_msgs/PoseStamped.h>
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
