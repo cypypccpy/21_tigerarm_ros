@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>如何在TigerArm中添加新的动作 &mdash; TigerArm 0.0.1 文档</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="如何高效地调试TigerArm" href="how2debug.html" />
+    <link rel="prev" title="在实际机器人上运行TigerArm" href="demos2.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> TigerArm
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="compilation.html">编译TigerArm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demos1.html">在仿真环境中运行TigerArm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demos2.html">在实际机器人上运行TigerArm</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">如何在TigerArm中添加新的动作</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">设置动作经过的轨迹点</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">注册新的键盘按键</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#moveit">将动作加入Moveit!动作组中</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="how2debug.html">如何高效地调试TigerArm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how2optimize.html">如何对TigerArm进行优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tofuture.html">新世纪TigerArm展望</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TigerArm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>如何在TigerArm中添加新的动作</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/how2use.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tigerarm">
+<h1>如何在TigerArm中添加新的动作<a class="headerlink" href="#tigerarm" title="永久链接至标题">¶</a></h1>
+<p>在TigerArm中，一个按键对应于一个动作。当我们想要创建一个新动作的时候，需要先设定好他要经过的轨迹点，然后在MoveIt!中将其添加到动作组中，并与键盘上的一个按键对应起来</p>
+<div class="section" id="id1">
+<h2>设置动作经过的轨迹点<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>我们是通过xyzrpy六个参数来表示一个点的位置，坐标原点位于机器人底盘中心</p>
+<p>src/arm_moveit_kinematics/config/poses.yaml</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span>  Total: 2 #总共读入的轨迹点数
+  #EffectorLength: 0.05
+  Points: #轨迹点序列
+-
+  tag: pre_place #准备放入矿仓
+  id: 0
+  xyz:
+    - -0.14
+    - -0.01
+    - 0.67
+  rpy:
+    - 2.0601
+    - -0.000
+    - 1.6252
+  action: 1
+-
+  tag: pre_pick_island #准备抓取矿石(原姿态，现已废弃)
+  id: 1
+  xyz:
+    - 0.52
+    - -0.00
+    - 0.38
+  rpy:
+    - 2.0089
+    - -0.0044
+    - -1.5773
+  action: 1
+  ...
+</pre></div>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>注册新的键盘按键<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>打开src/arm_moveit_kinematics/include/arm_moveit_kinematics/keyboards.h，在enum中添加新的键盘对应数值进行按键注册</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">namespace</span> <span class="n">arm_keys</span><span class="p">{</span>
+    <span class="k">enum</span> <span class="n">kv</span><span class="p">{</span>
+        <span class="n">_w</span> <span class="o">=</span> <span class="mi">119</span><span class="p">,</span>
+        <span class="p">...</span>
+        <span class="n">_o</span> <span class="o">=</span> <span class="mi">111</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="moveit">
+<h2>将动作加入Moveit!动作组中<a class="headerlink" href="#moveit" title="永久链接至标题">¶</a></h2>
+<p>打开src/arm_moveit_kinematics/src/arm_moveit_kinematics_node.cpp，找到如下函数</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span> <span class="n">ArmJointsControllerNode</span><span class="o">::</span><span class="n">key_recv_callback</span><span class="p">(</span><span class="k">const</span> <span class="n">std_msgs</span><span class="o">::</span><span class="n">Int32</span><span class="o">&amp;</span> <span class="n">msg</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="n">ROS_INFO_NAMED</span><span class="p">(</span><span class="s">&quot;arm_log&quot;</span><span class="p">,</span> <span class="s">&quot;recieved keyboard msgs: %d&quot;</span><span class="p">,</span> <span class="n">msg</span><span class="p">.</span><span class="n">data</span><span class="p">);</span>
+
+    <span class="n">tf</span><span class="o">::</span><span class="n">TransformListener</span> <span class="n">listener</span><span class="p">;</span>
+    <span class="n">geometry_msgs</span><span class="o">::</span><span class="n">PoseStamped</span> <span class="n">g_pose_target_stamp</span><span class="p">;</span>
+
+    <span class="p">...</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="p">().</span><span class="n">swap</span><span class="p">(</span><span class="n">target_pose_name</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>然后仿照如下格式加入到分支中，需要修改kv::后面的值与target_pose_name</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">case</span> <span class="n">kv</span><span class="o">::</span><span class="nl">_space</span><span class="p">:</span> <span class="c1">//拿出矿仓中的矿石进入准备兑换模式</span>
+    <span class="n">target_pose_name</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;pre_place&quot;</span><span class="p">,</span> <span class="s">&quot;pick_mineral&quot;</span><span class="p">,</span> <span class="s">&quot;pre_place&quot;</span><span class="p">,</span> <span class="s">&quot;pre_exchange&quot;</span><span class="p">};</span>
+    <span class="n">set_target_pose</span><span class="p">(</span><span class="n">target_pose_name</span><span class="p">);</span>
+    <span class="k">break</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>里面的target_pose_name即是在yaml中设定的轨迹点的tag，Moveit!将会规划出一条按给定顺序经过相应点的路径出来</p>
+</div>
+<p>然后重新编译，即可完成添加一个新的动作</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="how2debug.html" class="btn btn-neutral float-right" title="如何高效地调试TigerArm" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="demos2.html" class="btn btn-neutral float-left" title="在实际机器人上运行TigerArm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; 版权所有 2021, YuanPei Chen, XinYu Su.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

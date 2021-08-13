@@ -1,0 +1,263 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>如何高效地调试TigerArm &mdash; TigerArm 0.0.1 文档</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="如何对TigerArm进行优化" href="how2optimize.html" />
+    <link rel="prev" title="如何在TigerArm中添加新的动作" href="how2use.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> TigerArm
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="compilation.html">编译TigerArm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demos1.html">在仿真环境中运行TigerArm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demos2.html">在实际机器人上运行TigerArm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how2use.html">如何在TigerArm中添加新的动作</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">如何高效地调试TigerArm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">数值化轨迹与轨迹点</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rviz">在Rviz中手动进行调试</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#wasd">使用WASD进行位姿微调</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">关于TigerArm调试的一些经验</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="how2optimize.html">如何对TigerArm进行优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tofuture.html">新世纪TigerArm展望</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TigerArm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>如何高效地调试TigerArm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/how2debug.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tigerarm">
+<h1>如何高效地调试TigerArm<a class="headerlink" href="#tigerarm" title="永久链接至标题">¶</a></h1>
+<p>在实际的项目中，会遇到形形色色的需求与目标，如何进行高效地调试也成了一个重要的问题。</p>
+<p>在此，我先介绍对于一个完整动作的调试，它包括了如何数值化，可视化轨迹点的方法，与一些调整的经验。</p>
+<p>下一章，将会介绍轨迹的优化，速度的增减，以及离线规划的需求等等。</p>
+<div class="section" id="id1">
+<h2>数值化轨迹与轨迹点<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>对于一个动作的调试，获得正确的想要到达的目标值是最重要的第一步。但xyzrpy的值并不是肉眼就能设定的，因此我们会打印出当前末端执行器的位姿，作为轨迹点设置的参考</p>
+<img alt="_images/sendpix0.jpg" src="_images/sendpix0.jpg" />
+<p>每个动作完成后都会输出这样两个INFO</p>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>Target指的是目标点的位姿，Currect指的是当前点的位姿，q是四元数表示的旋转角，a是欧拉角rpy表示的旋转角</p>
+</div>
+<p>轨迹点的数值化还没封装，而且输出的是关节角度，用的不多，这里先不谈</p>
+</div>
+<div class="section" id="rviz">
+<h2>在Rviz中手动进行调试<a class="headerlink" href="#rviz" title="永久链接至标题">¶</a></h2>
+<p>Rviz提供了MoveIt!运动规划的插件，使其可以在GUI上进行调试。进入Joints版块，拖动条条，然后进入Planning版块点击Plan &amp; Execute即可将对应关节转到相应角度</p>
+<img alt="_images/motion.gif" src="_images/motion.gif" />
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>在Rviz插件中每一次进行手动调试都需要先点击左下角的reset再进行滚动条的拖动，以及注意Rviz中是不会打印出位姿信息的，如实在想获取，可通过任意键盘驱动后看Current信息获得</p>
+</div>
+</div>
+<div class="section" id="wasd">
+<h2>使用WASD进行位姿微调<a class="headerlink" href="#wasd" title="永久链接至标题">¶</a></h2>
+<p>在原始的设定中，设置了wsad与WS六个按键，分别对应于末端执行器前后左右上下移动1cm，可以用于调试</p>
+</div>
+<div class="section" id="id2">
+<h2>关于TigerArm调试的一些经验<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>在经过了多次的尝试后，对于一个新的动作的调试我认为按以下步骤进行效率比较高:</p>
+<ul class="simple">
+<li><p>通过Rviz里的手动拖拽滚动条使末端大致靠近目标</p></li>
+<li><p>通过WASD微调使末端到达目标</p></li>
+<li><p>记录此时终端打印出的位姿信息，将其记录于poses.yaml中，完成一个轨迹点的定位。如还需更高精度的调整可于yaml中手动修改后观察效果</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>注意一般rqy角度的调整都是在Rviz上完成的</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="how2optimize.html" class="btn btn-neutral float-right" title="如何对TigerArm进行优化" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="how2use.html" class="btn btn-neutral float-left" title="如何在TigerArm中添加新的动作" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; 版权所有 2021, YuanPei Chen, XinYu Su.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

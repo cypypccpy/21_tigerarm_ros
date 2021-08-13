@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>如何对TigerArm进行优化 &mdash; TigerArm 0.0.1 文档</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="新世纪TigerArm展望" href="tofuture.html" />
+    <link rel="prev" title="如何高效地调试TigerArm" href="how2debug.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> TigerArm
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="compilation.html">编译TigerArm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demos1.html">在仿真环境中运行TigerArm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demos2.html">在实际机器人上运行TigerArm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how2use.html">如何在TigerArm中添加新的动作</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how2debug.html">如何高效地调试TigerArm</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">如何对TigerArm进行优化</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">多路径点规划问题</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">时间参数化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">修改执行速度</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">离线规划</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tofuture.html">新世纪TigerArm展望</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TigerArm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>如何对TigerArm进行优化</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/how2optimize.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tigerarm">
+<h1>如何对TigerArm进行优化<a class="headerlink" href="#tigerarm" title="永久链接至标题">¶</a></h1>
+<p>这一章，是我在TigerArm上做的工程量最大的优化，也是我在这个项目中遇到的最大的问题，直到现在，也不能说完全解决了，但我认为我还是给出了一个不错的方案，可以供大家参考。</p>
+<p>他的需求来源很简单:当一个动作需要连续经过多个路径点时，简单地每段路plan一遍会造成在路径点附近反复做加减速的过程，运动就不连贯了。
+我们首要做的就是避免这件事，使动作连贯起来。然后考虑执行速度的问题，最后则尝试离线规划，使运动之间真正做到没有停顿。</p>
+<div class="section" id="id1">
+<h2>多路径点规划问题<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>这个问题曾经困扰了我两三天，我尝试过各种不同的方法，翻阅过move_group(MoveIt!c++Interface)所有的接口，网上大量的博客，都没有找到有效的解决方案。</p>
+<p>最后，我找到了一个笨笨的解决方法:先将每个路径点间的Trajectory给Plan出来，再将他们首尾相连，然后把这些路径点当作约束再进行一次Plan，就能做到没有停顿地执行动作</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">moveit_msgs</span><span class="o">::</span><span class="n">RobotTrajectory</span> <span class="n">ArmJointsControllerNode</span><span class="o">::</span><span class="n">compute_trajectory</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">geometry_msgs</span><span class="o">::</span><span class="n">Pose</span><span class="o">&gt;&amp;</span> <span class="n">g_pose_muilt_target_</span><span class="p">,</span>
+                                                                        <span class="n">moveit</span><span class="o">::</span><span class="n">planning_interface</span><span class="o">::</span><span class="n">MoveGroupInterface</span><span class="o">*</span> <span class="n">move_group_interface</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="c1">//通过目标点计算轨迹</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">g_pose_muilt_target_</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">move_group_interface</span><span class="o">-&gt;</span><span class="n">setPoseTarget</span><span class="p">(</span><span class="n">g_pose_muilt_target_</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+
+        <span class="n">success</span> <span class="o">=</span> <span class="p">(</span><span class="n">move_group_interface</span><span class="o">-&gt;</span><span class="n">plan</span><span class="p">(</span><span class="n">my_plan</span><span class="p">)</span> <span class="o">==</span> <span class="n">moveit</span><span class="o">::</span><span class="n">planning_interface</span><span class="o">::</span><span class="n">MoveItErrorCode</span><span class="o">::</span><span class="n">SUCCESS</span><span class="p">);</span>
+        <span class="n">my_muilt_plan</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">my_plan</span><span class="p">);</span>
+
+        <span class="n">my_plan</span><span class="p">.</span><span class="n">start_state_</span><span class="p">.</span><span class="n">joint_state</span><span class="p">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">my_plan</span><span class="p">.</span><span class="n">trajectory_</span><span class="p">.</span><span class="n">joint_trajectory</span><span class="p">.</span><span class="n">points</span><span class="p">.</span><span class="n">back</span><span class="p">().</span><span class="n">positions</span><span class="p">;</span>
+        <span class="n">move_group_interface</span><span class="o">-&gt;</span><span class="n">setStartState</span><span class="p">(</span><span class="n">my_plan</span><span class="p">.</span><span class="n">start_state_</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">//连接轨迹</span>
+    <span class="n">trajectory</span><span class="p">.</span><span class="n">joint_trajectory</span><span class="p">.</span><span class="n">joint_names</span> <span class="o">=</span> <span class="n">my_muilt_plan</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">trajectory_</span><span class="p">.</span><span class="n">joint_trajectory</span><span class="p">.</span><span class="n">joint_names</span><span class="p">;</span>
+    <span class="n">trajectory</span><span class="p">.</span><span class="n">joint_trajectory</span><span class="p">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">my_muilt_plan</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">trajectory_</span><span class="p">.</span><span class="n">joint_trajectory</span><span class="p">.</span><span class="n">points</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">my_muilt_plan</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">my_muilt_plan</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">trajectory_</span><span class="p">.</span><span class="n">joint_trajectory</span><span class="p">.</span><span class="n">points</span><span class="p">.</span><span class="n">size</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">trajectory</span><span class="p">.</span><span class="n">joint_trajectory</span><span class="p">.</span><span class="n">points</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">my_muilt_plan</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">trajectory_</span><span class="p">.</span><span class="n">joint_trajectory</span><span class="p">.</span><span class="n">points</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">//重规划</span>
+    <span class="n">trajectory_actul</span> <span class="o">=</span> <span class="n">trajectory</span><span class="p">;</span>
+    <span class="n">robot_trajectory</span><span class="o">::</span><span class="n">RobotTrajectory</span> <span class="n">rt</span><span class="p">(</span><span class="n">move_group_interface</span><span class="o">-&gt;</span><span class="n">getCurrentState</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">getRobotModel</span><span class="p">(),</span> <span class="n">move_group_interface</span><span class="o">-&gt;</span><span class="n">getName</span><span class="p">());</span>
+    <span class="n">rt</span><span class="p">.</span><span class="n">setRobotTrajectoryMsg</span><span class="p">(</span><span class="o">*</span><span class="n">move_group_interface</span><span class="o">-&gt;</span><span class="n">getCurrentState</span><span class="p">(),</span> <span class="n">trajectory_actul</span><span class="p">);</span>
+    <span class="p">...</span>
+    <span class="k">return</span> <span class="n">trajectory_actul</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>过程虽然曲折了点，但其实运算并不耗时，只相当于原本Plan的时间x2，而Plan的时间本身就很短</p>
+</div>
+</div>
+<div class="section" id="id2">
+<h2>时间参数化<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p>在上面代码的省略号中，有一个重要的东西:时间参数化</p>
+<p>MoveIt目前主要是一个kinematic运动规划框架-主要用来规划机器人各关节或末端执行器的位置，但没有涉及到机器人的速度和加速度限制。
+因此，MoveIt可以利用后处理时间参数化运动轨迹的速度和加速度值。</p>
+<p>在TigerArm中，我们也使用了iptp(Iterative Parabolic Time Parameterization)算法对最终轨迹进行后处理</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//iptp算法</span>
+<span class="n">trajectory_processing</span><span class="o">::</span><span class="n">IterativeParabolicTimeParameterization</span> <span class="n">iptp</span><span class="p">;</span>
+
+<span class="n">iptp</span><span class="p">.</span><span class="n">computeTimeStamps</span><span class="p">(</span><span class="n">rt</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+
+<span class="n">rt</span><span class="p">.</span><span class="n">getRobotTrajectoryMsg</span><span class="p">(</span><span class="n">trajectory_actul</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>理论上我们因此计算出了速度与加速度后，可以发与下位机辅助插补，可以得到更好的运动控制，至于为什么没有，当然是因为一直没时间啦~</p>
+</div>
+<div class="section" id="id3">
+<h2>修改执行速度<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
+<p>对于不同的运动而言，需要不同的执行速度，这个问题曾经也困扰过我一段时间。理论上，应该是从算法调用的层面上进行优化，但MoveIt!与ompl中的规划算法是通过插件的形式整合在一起的，
+我在ompl的配置文件上又没找到任何与规划的速度有关的参数。</p>
+<p>在快要gg思密达~的时候，居然给我找到个办法:通过调整每个轨迹点的time_from_start属性，就能在Execute的时候加快或减慢运动，
+于是我做了如下处理:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">moveit_msgs</span><span class="o">::</span><span class="n">RobotTrajectory</span> <span class="n">ArmJointsControllerNode</span><span class="o">::</span><span class="n">finetune_time</span><span class="p">(</span><span class="n">moveit_msgs</span><span class="o">::</span><span class="n">RobotTrajectory</span> <span class="n">trajectory_</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span><span class="o">&amp;</span> <span class="n">scale</span> <span class="o">=</span> <span class="mf">0.85</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//std::cout &lt;&lt; &quot;speed_scale: &quot; &lt;&lt; scale &lt;&lt; std::endl;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">trajectory_</span><span class="p">.</span><span class="n">joint_trajectory</span><span class="p">.</span><span class="n">points</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">trajectory_</span><span class="p">.</span><span class="n">joint_trajectory</span><span class="p">.</span><span class="n">points</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">positions</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">trajectory_</span><span class="p">.</span><span class="n">joint_trajectory</span><span class="p">.</span><span class="n">points</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">time_from_start</span><span class="p">.</span><span class="k">operator</span><span class="o">*=</span><span class="p">(</span><span class="n">scale</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">trajectory_</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">...</span>
+<span class="c1">//通过time_from_start 调整速度</span>
+<span class="n">trajectory_actul</span> <span class="o">=</span> <span class="n">ArmJointsControllerNode</span><span class="o">::</span><span class="n">finetune_time</span><span class="p">(</span><span class="n">trajectory_actul</span><span class="p">,</span> <span class="n">speed_scale</span><span class="p">);</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<p>然后在每条轨迹规划前给予一个速度scale，达到控制速度的作用</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="p">...</span>
+<span class="k">case</span> <span class="n">kv</span><span class="o">::</span><span class="nl">_u</span><span class="p">:</span> <span class="c1">//兑换完矿石后推入矿槽</span>
+    <span class="n">speed_scale</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">;</span>
+    <span class="n">target_pose_name</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;push&quot;</span><span class="p">};</span>
+    <span class="n">set_target_pose</span><span class="p">(</span><span class="n">target_pose_name</span><span class="p">);</span>
+    <span class="k">break</span><span class="p">;</span>
+<span class="p">...</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>在实机时speed_scale的设置应比较小心，当速度太快时会造成路径收缩，有危险</p>
+</div>
+<p>这么做虽然很蠢，但确实能用，能满足大部分对速度的需求。这也是可以说还未解决的地方，希望有志之士未来能补上这块空缺，用真正科学合理方法控制速度</p>
+</div>
+<div class="section" id="id4">
+<h2>离线规划<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
+<p>src/arm_moveit_kinematics/src/arm_offline_trajectory_planner.cpp</p>
+<p>离线规划我单独在一个cpp文件里写着，虽然看上去和在线规划差别不大但其实比较复杂且需要具体理解MoveIt!的工作机制，整理起来比较麻烦，加上现在笔者写到这里有点累了，等下次有空在更新吧~</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="tofuture.html" class="btn btn-neutral float-right" title="新世纪TigerArm展望" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="how2debug.html" class="btn btn-neutral float-left" title="如何高效地调试TigerArm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; 版权所有 2021, YuanPei Chen, XinYu Su.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

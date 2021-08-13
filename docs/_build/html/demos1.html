@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="zh" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>在仿真环境中运行TigerArm &mdash; TigerArm 0.0.1 文档</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="在实际机器人上运行TigerArm" href="demos2.html" />
+    <link rel="prev" title="编译TigerArm" href="compilation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> TigerArm
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="compilation.html">编译TigerArm</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">在仿真环境中运行TigerArm</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#rviz">启动Rviz与机器人环境</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">打开TigerArm控制节点</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="demos2.html">在实际机器人上运行TigerArm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how2use.html">如何在TigerArm中添加新的动作</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how2debug.html">如何高效地调试TigerArm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how2optimize.html">如何对TigerArm进行优化</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tofuture.html">新世纪TigerArm展望</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">TigerArm</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>在仿真环境中运行TigerArm</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/demos1.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tigerarm">
+<h1>在仿真环境中运行TigerArm<a class="headerlink" href="#tigerarm" title="永久链接至标题">¶</a></h1>
+<p>当你没有连接真实机器人时，可以选择在仿真中进行调试。说是仿真，其实只是使用Rviz进行虚拟机器人的可视化来达到模拟的作用，并没有使用到真实物理引擎如gazebo等，因此只能在运动学的层面上进行算法验证。</p>
+<p>launch文件夹将会自动打开 <code class="docutils literal notranslate"><span class="pre">roscore</span></code> 和 <code class="docutils literal notranslate"><span class="pre">rviz</span></code> 。</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>When you want to run tigerarm, you might need to source your ROS environment by running <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">devel/setup.bash</span></code> first (replace bash with zsh if your shell is zsh)</p>
+</div>
+<div class="section" id="rviz">
+<h2>启动Rviz与机器人环境<a class="headerlink" href="#rviz" title="永久链接至标题">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>roslaunch pixle_godzilla_moveit_config demo.launch
+</pre></div>
+</div>
+<p>等待直到rviz中画面出现机械臂</p>
+</div>
+<div class="section" id="id1">
+<h2>打开TigerArm控制节点<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
+<p>首先关闭控制节点，在src/arm_moveit_kinematics/launch/demo.launch中注释下行:</p>
+<div class="highlight-xml notranslate"><div class="highlight"><pre><span></span><span class="c">&lt;!--node name=&quot;arm_joints_controller_node&quot; pkg=&quot;arm_moveit_kinematics&quot; type=&quot;arm_joints_controller_node&quot; respawn=&quot;false&quot; output=&quot;screen&quot;&gt;</span>
+<span class="c">&lt;/node--&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注解</p>
+<p>当节点检测不到串口时，控制节点会不断报错以致污染命令行。在实际调试时也可以通过关闭控制节点来暂时停止对机械臂的控制</p>
+</div>
+<p>然后运行demo</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>roslaunch arm_moveit_kinematics demo.launch
+</pre></div>
+</div>
+<p>接着会出现一个新的终端，在新的终端中通过按键控制，注意保持鼠标光标停留在该终端</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="demos2.html" class="btn btn-neutral float-right" title="在实际机器人上运行TigerArm" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="compilation.html" class="btn btn-neutral float-left" title="编译TigerArm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; 版权所有 2021, YuanPei Chen, XinYu Su.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
