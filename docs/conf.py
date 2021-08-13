@@ -70,5 +70,6 @@ html_static_path = ['_static']
 latex_elements = {
 'preamble': r'''
 \usepackage{epstopdf}
+\usepackage{graphicx}
 ''',
 }
