@@ -19,7 +19,7 @@
 
 ## 背景
 
-基于 `ROS` 和 `Moveit` 实现的机械臂控制系统
+基于 `ROS` 和 `Moveit` 实现的机械臂控制系统，详细文档请阅读https://21-tigerarm-ros.readthedocs.io/zh_CN/latest/
 <br></br>
 
 ## 安装
